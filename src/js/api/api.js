@@ -12,8 +12,7 @@ goog.require('pifuxelck.data.Turn');
  * Represents the API that is used to communicate with an abstract backend.
  * @constructor
  */
-pifuxelck.api.Api = function() {
-};
+pifuxelck.api.Api = function() {};
 
 
 /**
@@ -83,4 +82,4 @@ pifuxelck.api.Api.prototype.move = goog.abstractMethod;
  * @return {!goog.Promise.<Array.<pifuxelck.data.Game>>} the list of completed
  *     games
  */
-pifuxelck.api.Api.history = goog.abstractMethod;
+pifuxelck.api.Api.prototype.history = goog.abstractMethod;
