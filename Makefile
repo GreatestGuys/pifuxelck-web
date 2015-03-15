@@ -10,9 +10,9 @@ HTML_DIR=${SRC_DIR}/html
 JS_DIR=${SRC_DIR}/js
 EXTERN_DIR=externs/
 
-SRCS_JS=${JS_DIR}/*.js
-SRCS_CSS=${CSS_DIR}/*.scss
-SRCS_HTML=${HTML_DIR}/*.html
+SRCS_JS=$(shell find ${JS_DIR} -name '*.js')
+SRCS_CSS=$(shell find ${CSS_DIR} -name '*.scss')
+SRCS_HTML=$(shell find ${HTML_DIR} -name '*.html')
 
 EXTERNS_FLAGS=`echo ${EXTERN_DIR}/*.js | sed -r 's/(^| )/\1--compiler_flags=--externs=/g'`
 
@@ -34,27 +34,28 @@ deploy : ${DEPLOY_DIR}
 # Generates a directory structure in ${DEPLOY_DIR} that can be deployed to the
 # HTTP server that hosts the app.
 ${DEPLOY_DIR} : ${DEPLOY_JS} ${DEPLOY_CSS} ${SRCS_HTML}
-	mkdir -p ${DEPLOY_DIR}
-	cp ${DEPLOY_JS} ${DEPLOY_DIR}
-	cp ${DEPLOY_CSS} ${DEPLOY_DIR}
-	cp -R ${HTML_DIR}/* ${DEPLOY_DIR}
+	@mkdir -p ${DEPLOY_DIR}
+	@cp ${DEPLOY_JS} ${DEPLOY_DIR}
+	@cp ${DEPLOY_CSS} ${DEPLOY_DIR}
+	@cp -R ${HTML_DIR}/* ${DEPLOY_DIR}
 
 ${DEPLOY_JS} : ${SRCS_JS}
-	mkdir -p ${GEN_DIR}
-	${CLOSURE_BUILDER} \
+	@mkdir -p ${GEN_DIR}
+	@${CLOSURE_BUILDER} \
 					--root=${CLOSURE_ROOT} \
 					--root=${JS_DIR} \
 					--namespace=${NAMESPACE} \
 					--output_mode=${COMPILE_MODE} \
 					--compiler_flags=--warning_level=VERBOSE \
 					--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS \
+					--compiler_flags=--closure_entry_point=${NAMESPACE} \
 					--compiler_jar=${CLOSURE_COMPILER} > ${DEPLOY_JS}
 # Add the following to the above flags if/when we have externs...
 #					${EXTERNS_FLAGS} \
 
 ${DEPLOY_CSS} : ${SRCS_CSS}
-	mkdir -p ${GEN_DIR}
-	scss ${SRCS_CSS} > ${DEPLOY_CSS}
+	@mkdir -p ${GEN_DIR}
+	@scss ${SRCS_CSS} > ${DEPLOY_CSS}
 
 clean :
-	rm -Rf ${OUT_DIR}
+	@rm -Rf ${OUT_DIR}

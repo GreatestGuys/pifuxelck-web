@@ -1,8 +1,9 @@
-goog.provide('pifuxelck.graphics');
-goog.provide('pifuxelck.graphics.Cavas');
+goog.provide('pifuxelck.ui.graphics');
+goog.provide('pifuxelck.ui.graphics.Cavas');
+goog.provide('pifuxelck.ui.graphics.Color');
 
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 
 
 
@@ -17,7 +18,20 @@ goog.require('goog.dom.classes');
  *    alpha: number
  * }}
  */
-pifuxelck.graphics.Color;
+pifuxelck.ui.graphics.Color;
+
+
+/**
+ * Create a new color object.
+ * @param {number} red the red component
+ * @param {number} green the green component
+ * @param {number} blue the blue component
+ * @param {number} alpha the alpha component
+ * @return {!pifuxelck.ui.graphics.Color}
+ */
+pifuxelck.ui.graphics.newColor = function(red, green, blue, alpha) {
+  return {'red': red, 'green': green, 'blue': blue, 'alpha': alpha};
+};
 
 
 /**
@@ -25,7 +39,7 @@ pifuxelck.graphics.Color;
  * @param {Element} container A DOM element that will contain the canvas.
  * @constructor
  */
-pifuxelck.graphics.Canvas = function(container) {
+pifuxelck.ui.graphics.Canvas = function(container) {
   /** @private {Element} */
   this.container_ = container;
 
@@ -58,14 +72,14 @@ pifuxelck.graphics.Canvas = function(container) {
  * Swap buffers so that the back buffer becomes visible, and the front buffer
  * becomes the back buffer.
  */
-pifuxelck.graphics.Canvas.prototype.flip = function() {
+pifuxelck.ui.graphics.Canvas.prototype.flip = function() {
   // Use a three stage flip where the z-index of the front buffer is lowered,
   // and the back buffer is raised before hiding the front buffer. This will
   // ensure that there is no flickering when the buffers are flipped as at least
   // one buffer is visible at all times.
-  goog.dom.classes.swap(this.frontBuffer_, 'frontBuffer', 'midBuffer');
-  goog.dom.classes.swap(this.backBuffer_, 'backBuffer', 'frontBuffer');
-  goog.dom.classes.swap(this.frontBuffer_, 'midBuffer', 'backBuffer');
+  goog.dom.classlist.swap(this.frontBuffer_, 'frontBuffer', 'midBuffer');
+  goog.dom.classlist.swap(this.backBuffer_, 'backBuffer', 'frontBuffer');
+  goog.dom.classlist.swap(this.frontBuffer_, 'midBuffer', 'backBuffer');
 
   var newBackBuffer = this.frontBuffer_;
   this.frontBuffer_ = this.backBuffer_;
@@ -81,7 +95,7 @@ pifuxelck.graphics.Canvas.prototype.flip = function() {
  * Returns the back buffer canvas context that is safe to draw to.
  * @return {CanvasRenderingContext2D} A context that can be drawn to.
  */
-pifuxelck.graphics.Canvas.prototype.getContext = function() {
+pifuxelck.ui.graphics.Canvas.prototype.getContext = function() {
   return /** @type {CanvasRenderingContext2D} */ (this.backBuffer_.getContext('2d'));
 };
 
@@ -91,7 +105,7 @@ pifuxelck.graphics.Canvas.prototype.getContext = function() {
  * screen. This method should be called prior to drawing the content of the back
  * buffer.
  */
-pifuxelck.graphics.Canvas.prototype.rescale = function() {
+pifuxelck.ui.graphics.Canvas.prototype.rescale = function() {
   this.rescaleBuffer_(this.backBuffer_);
 };
 
@@ -100,7 +114,7 @@ pifuxelck.graphics.Canvas.prototype.rescale = function() {
  * Return the width of the drawing buffer.
  * @return {number} The width of the drawing buffer.
  */
-pifuxelck.graphics.Canvas.prototype.getWidth = function() {
+pifuxelck.ui.graphics.Canvas.prototype.getWidth = function() {
   return this.backBuffer_.width;
 };
 
@@ -109,16 +123,16 @@ pifuxelck.graphics.Canvas.prototype.getWidth = function() {
  * Return the height of the drawing buffer.
  * @return {number} The height of the drawing buffer.
  */
-pifuxelck.graphics.Canvas.prototype.getHeight = function() {
+pifuxelck.ui.graphics.Canvas.prototype.getHeight = function() {
   return this.backBuffer_.height;
 };
 
 
 /**
  * Set the fill color.
- * @param {pifuxelck.graphics.Color} color The fill color.
+ * @param {pifuxelck.ui.graphics.Color} color The fill color.
  */
-pifuxelck.graphics.Canvas.prototype.setFillColor = function(color) {
+pifuxelck.ui.graphics.Canvas.prototype.setFillColor = function(color) {
   return this
     .getContext()
     .setFillColor(color.red, color.green, color.blue, color.alpha);
@@ -127,9 +141,9 @@ pifuxelck.graphics.Canvas.prototype.setFillColor = function(color) {
 
 /**
  * Set the stroke color.
- * @param {pifuxelck.graphics.Color} color The stroke color.
+ * @param {pifuxelck.ui.graphics.Color} color The stroke color.
  */
-pifuxelck.graphics.Canvas.prototype.setStrokeColor = function(color) {
+pifuxelck.ui.graphics.Canvas.prototype.setStrokeColor = function(color) {
   return this
     .getContext()
     .setStrokeColor(color.red, color.green, color.blue, color.alpha);
@@ -142,7 +156,7 @@ pifuxelck.graphics.Canvas.prototype.setStrokeColor = function(color) {
  * @param {HTMLCanvasElement} buffer The buffer to rescale.
  * @private
  */
-pifuxelck.graphics.Canvas.prototype.rescaleBuffer_ = function(buffer) {
+pifuxelck.ui.graphics.Canvas.prototype.rescaleBuffer_ = function(buffer) {
   buffer.width = this.container_.clientWidth;
   buffer.height = this.container_.clientHeight;
 };
