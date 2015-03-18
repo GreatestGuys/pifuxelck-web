@@ -2,8 +2,8 @@ goog.provide('pifuxelck.api.ApiImpl');
 
 goog.require('goog.Promise');
 goog.require('goog.net.XhrIo');
-goog.require('pifuxelck.Identity');
 goog.require('pifuxelck.api.Api');
+goog.require('pifuxelck.auth.Identity');
 goog.require('pifuxelck.data.Game');
 goog.require('pifuxelck.data.InboxEntry');
 goog.require('pifuxelck.data.Turn');
@@ -50,7 +50,7 @@ pifuxelck.api.ApiImpl.prototype.loggedIn = function() {
  * @param {string=} opt_method the HTTP method to use when making the request
  * @param {string=} opt_body the body of the request
  * @template T
- * @return {goog.Promise.<!T>}
+ * @return {!goog.Promise.<!T>}
  */
 pifuxelck.api.ApiImpl.prototype.makeApiCall_ =
     function(path, f, opt_method, opt_body) {
@@ -76,15 +76,24 @@ pifuxelck.api.ApiImpl.prototype.makeApiCall_ =
 
 
 /** @inheritDoc */
-pifuxelck.api.ApiImpl.prototype.registerAccount = goog.abstractMethod;
+pifuxelck.api.ApiImpl.prototype.registerAccount = function(name, password) {
+  var toIdentity = function(id, resolve, reject) {
+    resolve(new pifuxelck.auth.Identity(id, name));
+  };
+  var body = JSON.stringify({'display_name': name, 'password': password});
+  return this.makeApiCall_('/account/register', toIdentity, 'POST', body);
+}
 
 
-/**
- * Attempts to login and obtain an authentication token.
- * @param {pifuxelck.Identity} identity the identity of the current user
- * @return {!goog.Promise.<string>}the authentication token
- */
-pifuxelck.api.ApiImpl.prototype.login = goog.abstractMethod;
+/** @inheritDoc */
+pifuxelck.api.ApiImpl.prototype.login = function(name, password) {
+  var saveAuthToken = goog.bind(function(authToken, resolve, reject) {
+    this.authToken_ = authToken;
+    resolve(authToken);
+  }, this);
+  var body = JSON.stringify({'display_name': name, 'password': password});
+  return this.makeApiCall_('/login/password', saveAuthToken, 'POST', body);
+};
 
 
 /** @inheritDoc */
@@ -130,4 +139,3 @@ pifuxelck.api.ApiImpl.prototype.move = goog.abstractMethod;
  *     games
  */
 pifuxelck.api.ApiImpl.prototype.history = goog.abstractMethod;
-

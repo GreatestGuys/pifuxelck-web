@@ -1,7 +1,7 @@
 goog.provide('pifuxelck.api.Api');
 
 goog.require('goog.Promise');
-goog.require('pifuxelck.Identity');
+goog.require('pifuxelck.auth.Identity');
 goog.require('pifuxelck.data.Game');
 goog.require('pifuxelck.data.InboxEntry');
 goog.require('pifuxelck.data.Turn');
@@ -27,15 +27,17 @@ pifuxelck.api.Api.prototype.loggedIn = goog.abstractMethod;
 /**
  * Registers a partial identity with the server.
  * @param {string} displayName the display name to register
- * @return {!goog.Promise.<!pifuxelck.Identity>} the registered user
+ * @param {string} password the user's password
+ * @return {!goog.Promise.<!pifuxelck.auth.Identity>} the registered user
  */
 pifuxelck.api.Api.prototype.registerAccount = goog.abstractMethod;
 
 
 /**
  * Attempts to login and obtain an authentication token.
- * @param {pifuxelck.Identity} identity the identity of the current user
- * @return {!goog.Promise.<string>}the authentication token
+ * @param {string} displayName the display name of the user
+ * @param {string} password the user's password
+ * @return {!goog.Promise.<string>} the authentication token
  */
 pifuxelck.api.Api.prototype.login = goog.abstractMethod;
 
