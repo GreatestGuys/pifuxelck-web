@@ -48,7 +48,7 @@ pifuxelck.api.ApiImpl.prototype.loggedIn = function() {
  *     to the body, the first parameter is used to resolve the value, the second
  *     to reject it
  * @param {string=} opt_method the HTTP method to use when making the request
- * @param {string=} opt_body the body of the request
+ * @param {Object|Array|string=} opt_body the body of the request
  * @template T
  * @return {!goog.Promise.<!T>}
  */
@@ -61,6 +61,10 @@ pifuxelck.api.ApiImpl.prototype.makeApiCall_ =
     xhr.headers.set('x-pifuxelck-auth', this.authToken_);
   }
 
+  // If the body is object like (array or object), then stringify it before
+  // sending it, otherwise pass it through unchanged.
+  var body = goog.isObject(opt_body) ? JSON.stringify(opt_body) : opt_body;
+
   return new goog.Promise(
       function(resolve, reject) {
         xhr.listen(goog.net.EventType.COMPLETE, function() {
@@ -70,7 +74,7 @@ pifuxelck.api.ApiImpl.prototype.makeApiCall_ =
                 reject('HTTP Request failed.');
               }
             });
-        xhr.send(url, opt_method, opt_body);
+        xhr.send(url, opt_method, body);
       }, this);
 };
 
@@ -80,7 +84,7 @@ pifuxelck.api.ApiImpl.prototype.registerAccount = function(name, password) {
   var toIdentity = function(id, resolve, reject) {
     resolve(new pifuxelck.auth.Identity(id, name));
   };
-  var body = JSON.stringify({'display_name': name, 'password': password});
+  var body = {'display_name': name, 'password': password};
   return this.makeApiCall_('/account/register', toIdentity, 'POST', body);
 }
 
@@ -91,7 +95,7 @@ pifuxelck.api.ApiImpl.prototype.login = function(name, password) {
     this.authToken_ = authToken;
     resolve(authToken);
   }, this);
-  var body = JSON.stringify({'display_name': name, 'password': password});
+  var body = {'display_name': name, 'password': password};
   return this.makeApiCall_('/login/password', saveAuthToken, 'POST', body);
 };
 
