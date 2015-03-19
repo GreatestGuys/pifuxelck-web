@@ -3,6 +3,7 @@ goog.provide('pifuxelck.api.ApiImpl');
 goog.require('goog.Promise');
 goog.require('goog.net.XhrIo');
 goog.require('pifuxelck.api.Api');
+goog.require('pifuxelck.api.AuthTokenStorage');
 goog.require('pifuxelck.auth.Identity');
 goog.require('pifuxelck.data.Game');
 goog.require('pifuxelck.data.InboxEntry');
@@ -12,13 +13,18 @@ goog.require('pifuxelck.data.Turn');
 
 /**
  * Represents the API that is used to communicate with an abstract backend.
+ * @param {pifuxelck.api.AuthTokenStorage} storage The storage mechanism for
+ *     persisting an authentication token across multiple page refreshes.
  * @param {string=} opt_protocol the protocol to use
  * @param {string=} opt_host the host of the API server
  * @param {number=} opt_port the port the API server is running on
  * @extends {pifuxelck.api.Api}
  * @constructor
  */
-pifuxelck.api.ApiImpl = function(opt_protocol, opt_host, opt_port) {
+pifuxelck.api.ApiImpl = function(storage, opt_protocol, opt_host, opt_port) {
+
+  /** @private {pifuxelck.api.AuthTokenStorage} */
+  this.authTokenStorage_ = storage;
 
   /** @private {string} */
   this.protocol_ = opt_protocol || 'https:';
@@ -28,17 +34,8 @@ pifuxelck.api.ApiImpl = function(opt_protocol, opt_host, opt_port) {
 
   /** @private {number} */
   this.port_ = opt_port || 443;
-
-  /** @private {string} */
-  this.authToken_ = '';
 };
 goog.inherits(pifuxelck.api.ApiImpl, pifuxelck.api.Api);
-
-
-/** @inheritDoc */
-pifuxelck.api.ApiImpl.prototype.loggedIn = function() {
-  return !!this.authToken_;
-}
 
 
 /**
@@ -56,9 +53,10 @@ pifuxelck.api.ApiImpl.prototype.makeApiCall_ =
     function(path, f, opt_method, opt_body) {
   var url = this.protocol_ + '//' + this.host_ + ':' + this.port_ + path;
 
+  var authToken = this.authTokenStorage_.getToken();
   var xhr = new goog.net.XhrIo();
-  if (this.authToken_) {
-    xhr.headers.set('x-pifuxelck-auth', this.authToken_);
+  if (authToken) {
+    xhr.headers.set('x-pifuxelck-auth', authToken);
   }
 
   // If the body is object like (array or object), then stringify it before
@@ -80,6 +78,18 @@ pifuxelck.api.ApiImpl.prototype.makeApiCall_ =
 
 
 /** @inheritDoc */
+pifuxelck.api.ApiImpl.prototype.loggedIn = function() {
+  return !!this.authTokenStorage_.getToken();
+}
+
+
+/** @inheritDoc */
+pifuxelck.api.ApiImpl.prototype.logout = function() {
+  this.authTokenStorage_.setToken('');
+};
+
+
+/** @inheritDoc */
 pifuxelck.api.ApiImpl.prototype.registerAccount = function(name, password) {
   var toIdentity = function(id, resolve, reject) {
     resolve(new pifuxelck.auth.Identity(id, name));
@@ -92,7 +102,7 @@ pifuxelck.api.ApiImpl.prototype.registerAccount = function(name, password) {
 /** @inheritDoc */
 pifuxelck.api.ApiImpl.prototype.login = function(name, password) {
   var saveAuthToken = goog.bind(function(authToken, resolve, reject) {
-    this.authToken_ = authToken;
+    this.authTokenStorage_.setToken(authToken);
     resolve(authToken);
   }, this);
   var body = {'display_name': name, 'password': password};

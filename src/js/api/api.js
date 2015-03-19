@@ -25,6 +25,12 @@ pifuxelck.api.Api.prototype.loggedIn = goog.abstractMethod;
 
 
 /**
+ * Log out by clearing the stored authentication token.
+ */
+pifuxelck.api.Api.prototype.logout = goog.abstractMethod;
+
+
+/**
  * Registers a partial identity with the server.
  * @param {string} displayName the display name to register
  * @param {string} password the user's password
