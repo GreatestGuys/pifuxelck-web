@@ -8,20 +8,25 @@ THIRD_PARTY=third_party
 CSS_DIR=${SRC_DIR}/css
 HTML_DIR=${SRC_DIR}/html
 JS_DIR=${SRC_DIR}/js
+TEMPLATE_DIR=${SRC_DIR}/templates
 EXTERN_DIR=externs/
 
 SRCS_JS=$(shell find ${JS_DIR} -name '*.js')
 SRCS_CSS=$(shell find ${CSS_DIR} -name '*.scss')
 SRCS_HTML=$(shell find ${HTML_DIR} -name '*.html')
+SRCS_TEMPLATES=$(shell find ${TEMPLATE_DIR} -name '*.soy')
+TEMPLATES_LIST=$(shell echo $(SRCS_TEMPLATES) | tr ' ' ',')
 
 EXTERNS_FLAGS=`echo ${EXTERN_DIR}/*.js | sed -r 's/(^| )/\1--compiler_flags=--externs=/g'`
 
 DEPLOY_JS=${GEN_DIR}/pifuxelck.js
+DEPLOY_TEMPLATES=${GEN_DIR}/pifuxelck-templates.js
 DEPLOY_CSS=${GEN_DIR}/styles.css
 
 CLOSURE_ROOT=${THIRD_PARTY}/closure-library/
 CLOSURE_BUILDER=python ${CLOSURE_ROOT}/closure/bin/build/closurebuilder.py
 CLOSURE_COMPILER=${THIRD_PARTY}/closure-compiler/compiler.jar
+SOY_COMPILER=java -jar ${THIRD_PARTY}/closure-templates-for-javascript/SoyToJsSrcCompiler.jar
 
 SCSS=${THIRD_PARTY}/sass/bin/scss
 
@@ -33,10 +38,11 @@ deploy : ${DEPLOY_DIR}
 
 # Generates a directory structure in ${DEPLOY_DIR} that can be deployed to the
 # HTTP server that hosts the app.
-${DEPLOY_DIR} : ${DEPLOY_JS} ${DEPLOY_CSS} ${SRCS_HTML}
+${DEPLOY_DIR} : ${DEPLOY_JS} ${DEPLOY_CSS} ${SRCS_HTML} ${DEPLOY_TEMPLATES}
 	@mkdir -p ${DEPLOY_DIR}
 	@cp ${DEPLOY_JS} ${DEPLOY_DIR}
 	@cp ${DEPLOY_CSS} ${DEPLOY_DIR}
+	@cp ${DEPLOY_TEMPLATES} ${DEPLOY_DIR}
 	@cp -R ${HTML_DIR}/* ${DEPLOY_DIR}
 
 ${DEPLOY_JS} : ${SRCS_JS}
@@ -52,6 +58,11 @@ ${DEPLOY_JS} : ${SRCS_JS}
 					--compiler_jar=${CLOSURE_COMPILER} > ${DEPLOY_JS}
 # Add the following to the above flags if/when we have externs...
 #					${EXTERNS_FLAGS} \
+
+${DEPLOY_TEMPLATES} : ${SRCS_TEMPLATES}
+	@${SOY_COMPILER} \
+		--outputPathFormat ${DEPLOY_TEMPLATES} \
+		--srcs ${TEMPLATES_LIST}
 
 ${DEPLOY_CSS} : ${SRCS_CSS}
 	@mkdir -p ${GEN_DIR}

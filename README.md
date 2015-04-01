@@ -15,6 +15,9 @@ from Ubuntu you can run the following:
 
     sudo apt-get install ruby-sass
 
+You will also need the [Java SDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+(6 or greater) to compile the [soy](https://developers.google.com/closure/templates/) templates.
+
 ## Building
 
 The project uses a simple makefile to build a deployable web application.
