@@ -6,8 +6,8 @@ goog.require('pifuxelck.data.Turn');
 /**
  * @export
  * @typedef {{
- *    game_id: string,
- *    turn:    pifuxelck.data.Turn
+ *    game_id:       string,
+ *    previous_turn: !pifuxelck.data.Turn
  * }}
  */
 pifuxelck.data.InboxEntry;
@@ -22,6 +22,6 @@ pifuxelck.data.InboxEntry;
 pifuxelck.data.newInboxEntry = function(gameId, turn) {
   return {
     'game_id': gameId,
-    'turn': turn
+    'previous_turn': turn
   };
 };

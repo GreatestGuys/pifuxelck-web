@@ -1,0 +1,17 @@
+$primary: #00BCD4;
+$primaryDark: #006064;
+
+$accent: #9C27B0;
+$accentDark: #4A148C;
+$accentLight: #CE93D8;
+
+$background_grey: #CFD8DC;
+$shadow_grey: #006064;
+
+$overlay_background: rgba(0, 0, 0, 0.5);
+
+$primaryText: rgba(0, 0, 0, 0.8);
+
+body {
+  background: $primary;
+}

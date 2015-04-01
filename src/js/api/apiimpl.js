@@ -7,6 +7,7 @@ goog.require('pifuxelck.api.AuthTokenStorage');
 goog.require('pifuxelck.auth.Identity');
 goog.require('pifuxelck.data.Game');
 goog.require('pifuxelck.data.InboxEntry');
+goog.require('pifuxelck.data.Message');
 goog.require('pifuxelck.data.Turn');
 
 
@@ -41,7 +42,7 @@ goog.inherits(pifuxelck.api.ApiImpl, pifuxelck.api.Api);
 /**
  * Make a call to the API server.
  * @param {string} path the path to request
- * @param {function(string, function(!T), function(*))} f the transform to apply
+ * @param {function(!Object, function(!T), function(*))} f the transform to apply
  *     to the body, the first parameter is used to resolve the value, the second
  *     to reject it
  * @param {string=} opt_method the HTTP method to use when making the request
@@ -67,7 +68,9 @@ pifuxelck.api.ApiImpl.prototype.makeApiCall_ =
       function(resolve, reject) {
         xhr.listen(goog.net.EventType.COMPLETE, function() {
               if (xhr.isSuccess()) {
-                f(xhr.getResponseText(), resolve, reject);
+                var msg = /** @type{pifuxelck.data.Message} */
+                    (JSON.parse(xhr.getResponseText()));
+                f(msg, resolve, reject);
               } else {
                 reject('HTTP Request failed.');
               }
@@ -91,30 +94,34 @@ pifuxelck.api.ApiImpl.prototype.logout = function() {
 
 /** @inheritDoc */
 pifuxelck.api.ApiImpl.prototype.registerAccount = function(name, password) {
-  var toIdentity = function(id, resolve, reject) {
+  var toIdentity = function(response, resolve, reject) {
+    var id = response['user']['id'];
     resolve(new pifuxelck.auth.Identity(id, name));
   };
-  var body = {'display_name': name, 'password': password};
-  return this.makeApiCall_('/account/register', toIdentity, 'POST', body);
+  var body = {'user': {'display_name': name, 'password': password}};
+  return this.makeApiCall_('/api/2/account/register', toIdentity, 'POST', body);
 }
 
 
 /** @inheritDoc */
 pifuxelck.api.ApiImpl.prototype.login = function(name, password) {
-  var saveAuthToken = goog.bind(function(authToken, resolve, reject) {
+  var saveAuthToken = goog.bind(function(response, resolve, reject) {
+    var authToken = response['meta']['auth'];
     this.authTokenStorage_.setToken(authToken);
     resolve(authToken);
   }, this);
-  var body = {'display_name': name, 'password': password};
-  return this.makeApiCall_('/login/password', saveAuthToken, 'POST', body);
+  var body = {'user': {'display_name': name, 'password': password}};
+  return this.makeApiCall_('/api/2/account/login', saveAuthToken, 'POST', body);
 };
 
 
 /** @inheritDoc */
 pifuxelck.api.ApiImpl.prototype.lookupUserId = function(displayName) {
   return this.makeApiCall_(
-      '/account/lookup/' + displayName,
-      function(id, resolve, reject) {resolve(parseInt(id, 10));});
+      '/api/2/contacts/lookup/' + displayName,
+      function(response, resolve, reject) {
+        resolve(parseInt(response['user']['id'], 10));
+      });
 };
 
 
@@ -124,7 +131,14 @@ pifuxelck.api.ApiImpl.prototype.lookupUserId = function(displayName) {
  * @param {!Array<number>} players a list IDs of players that are to be included in the game
  * @return {goog.Promise} a future that resolves if the game was created
  */
-pifuxelck.api.ApiImpl.prototype.newGame = goog.abstractMethod;
+pifuxelck.api.ApiImpl.prototype.newGame = function(label, players) {
+  var body = {'new_game': {'label': label, 'players': players}};
+  return this.makeApiCall_(
+      '/api/2/games/new',
+      function(response, resolve, reject) {resolve(response);},
+      'POST',
+      body);
+};
 
 
 /**
@@ -132,7 +146,11 @@ pifuxelck.api.ApiImpl.prototype.newGame = goog.abstractMethod;
  * @return {goog.Promise.<Array.<pifuxelck.data.InboxEntry>>} the list of all
  *     current entries in a user's inbox
  */
-pifuxelck.api.ApiImpl.prototype.inbox = goog.abstractMethod;
+pifuxelck.api.ApiImpl.prototype.inbox = function() {
+  return this.makeApiCall_(
+      '/api/2/games/inbox',
+      function(response, resolve, reject) {resolve(response);});
+};
 
 
 /**
@@ -143,13 +161,24 @@ pifuxelck.api.ApiImpl.prototype.inbox = goog.abstractMethod;
  *             inferred by the logged in state of the user.
  * @return {!goog.Promise} a future that resolves if submitting the move succeeded
  */
-pifuxelck.api.ApiImpl.prototype.move = goog.abstractMethod;
+pifuxelck.api.ApiImpl.prototype.move = function(gameId, turn) {
+  var body = {'turn': turn};
+  return this.makeApiCall_(
+      '/api/2/games/play/' + gameId,
+      function(response, resolve, reject) {resolve(response);},
+      'POST',
+      body);
+}
 
 
 /**
  * Retrieve a list of games that occurred after the given timestamp.
- * @param startTimeSeconds The unix timestamp to begin querying games at.
+ * @param startTimeId The completed_at_id of the last game.
  * @return {!goog.Promise.<Array.<pifuxelck.data.Game>>} the list of completed
  *     games
  */
-pifuxelck.api.ApiImpl.prototype.history = goog.abstractMethod;
+pifuxelck.api.ApiImpl.prototype.history = function(startTimeId) {
+  return this.makeApiCall_(
+      '/api/2/games/since/' + startTimeId,
+      function(response, resolve, reject) {resolve(response);});
+};

@@ -6,9 +6,10 @@ goog.require('pifuxelck.data.Turn');
 /**
  * @export
  * @typedef {{
- *    completed_at: number,
- *    game_id:      string,
- *    turns:        !Array.<pifuxelck.data.Turn>
+ *    id:              string,
+ *    completed_at:    number,
+ *    completed_at_id: number,
+ *    turns:           !Array.<pifuxelck.data.Turn>
  * }}
  */
 pifuxelck.data.Game;
