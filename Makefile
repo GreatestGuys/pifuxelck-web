@@ -43,12 +43,14 @@ deploy : ${DEPLOY_DIR}
 # Generates a directory structure in ${DEPLOY_DIR} that can be deployed to the
 # HTTP server that hosts the app.
 ${DEPLOY_DIR} : ${DEPLOY_JS} ${DEPLOY_CSS} ${SRCS_HTML}
+	@echo "[+] Copying intermediate files to deploy directory."
 	@mkdir -p ${DEPLOY_DIR}
 	@cp ${DEPLOY_JS} ${DEPLOY_DIR}
 	@cp ${DEPLOY_CSS} ${DEPLOY_DIR}
 	@cp -R ${HTML_DIR}/* ${DEPLOY_DIR}
 
 ${DEPLOY_JS} : ${SRCS_JS} ${GEN_TEMPLATES}
+	echo "[+] Compiling JavaScript."
 	@mkdir -p ${GEN_DIR}
 	@${CLOSURE_BUILDER} \
 					--root=${CLOSURE_ROOT} \
@@ -65,6 +67,7 @@ ${DEPLOY_JS} : ${SRCS_JS} ${GEN_TEMPLATES}
 #					${EXTERNS_FLAGS} \
 
 ${GEN_TEMPLATES} : ${SRCS_TEMPLATES}
+	@echo "[+] Generating Soy Templates."
 	@mkdir -p ${GEN_TEMPLATES_DIR}
 	@${SOY_COMPILER} \
 		--shouldProvideRequireSoyNamespaces \
@@ -73,6 +76,7 @@ ${GEN_TEMPLATES} : ${SRCS_TEMPLATES}
 		--srcs ${TEMPLATES_LIST}
 
 ${DEPLOY_CSS} : ${SRCS_CSS}
+	@echo "[+] Compiling SASS CSS."
 	@mkdir -p ${GEN_DIR}
 	@scss ${SRCS_CSS} > ${DEPLOY_CSS}
 

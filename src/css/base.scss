@@ -5,18 +5,144 @@ $accent: #9C27B0;
 $accentDark: #4A148C;
 $accentLight: #CE93D8;
 
-$background_grey: #CFD8DC;
-$shadow_grey: #006064;
+$backgroundGrey: #CFD8DC;
+// $shadowGrey: #006064;
+$shadowGrey: rgba(0, 96, 100, 0.4);
 
-$overlay_background: rgba(0, 0, 0, 0.5);
+$overlayBackground: rgba(0, 0, 0, 0.5);
 
 $primaryText: rgba(0, 0, 0, 0.8);
+$secondaryText: rgba(0, 0, 0, 0.6);
 $primaryTextWhite: rgba(255, 255, 255, 0.8);
 $secondaryTextWhite: rgba(255, 255, 255, 0.6);
 
+$transparent: rgba(0, 0, 0, 0);
+
+$navbar-height: 50px;
+$grid-margin: 10px;
+$list-element-min-height: 50px;
+$list-width: 500px;
+
 body {
-  background: $primary;
+  background: $backgroundGrey;
   color: $primaryText;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+.list-header {
+  position: relative;
+  margin-top: $navbar-height + 2 * $grid-margin;
+  min-height: $list-element-min-height;
+  background: white;
+  width: $list-width;
+  left: 50%;
+  margin-left: 0 - ($list-width / 2);
+
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: $shadowGrey;
+}
+
+.list {
+  position: relative;
+  height: 100%;
+  width: $list-width;
+  margin-top: $list-element-min-height;
+  left: 50%;
+  margin-left: 0 - ($list-width / 2);
+}
+
+.list-element {
+  width: 100%;
+  min-height: $list-element-min-height;
+  background: white;
+
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: $shadowGrey;
+}
+
+.grid {
+  position: absolute;
+  top: $navbar-height + 2 * $grid-margin;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
+
+.grid-element {
+  width: 250px;
+  min-height: 250px;
+  margin: $grid-margin;
+  display:inline-block;
+  background: white;
+
+  border-bottom-style: solid;
+  border-right-style: solid;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+  border-bottom-color: $shadowGrey;
+  border-right-color: $shadowGrey;
+}
+
+.fab {
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background: $accent;
+  font-size: 64px;
+}
+
+.fab > a {
+  position: absolute;
+  color: $primaryTextWhite;
+  text-decoration: none;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.navbar {
+  position: fixed;
+  z-index: 2;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: $navbar-height;
+
+  background: $primary;
+
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: $primaryDark;
+
+  color: $primaryTextWhite;
+
+  padding: 5px;
+}
+
+.navbar-header {
+  position: relative;
+  font-size: xx-large;
+  margin: 25px;
+  color: $primaryTextWhite;
+  text-decoration: none;
+}
+
+.navbar-entry {
+  font-size: x-large;
+  margin: 5px;
+  color: $primaryTextWhite;
+  text-decoration: none;
+}
+
+.primary-background {
+  background: $primary;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -24,8 +150,13 @@ h1, h2, h3, h4, h5, h6 {
   color: $primaryText;
 }
 
+input {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
 input.text {
-  background: $primary;
+  background: $transparent;
   color: $primaryTextWhite;
 
   border-top-style: none;
@@ -53,6 +184,10 @@ input.hero-button {
 input.big {
   font-size: xx-large;
   padding: 10px;
+}
+
+input.darktext {
+  color: $primaryText;
 }
 
 div.content {
@@ -88,4 +223,17 @@ div.hero-row {
 }
 :-ms-input-placeholder {
   color: $secondaryTextWhite;
+}
+
+.darktext::-webkit-input-placeholder{
+  color: $secondaryText;
+}
+.darktext:-moz-placeholder{
+  color: $secondaryText;
+}
+.darktext::-moz-placeholder{
+  color: $secondaryText;
+}
+.darktext:-ms-input-placeholder {
+  color: $secondaryText;
 }
