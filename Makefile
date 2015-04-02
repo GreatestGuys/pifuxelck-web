@@ -19,14 +19,18 @@ TEMPLATES_LIST=$(shell echo $(SRCS_TEMPLATES) | tr ' ' ',')
 
 EXTERNS_FLAGS=`echo ${EXTERN_DIR}/*.js | sed -r 's/(^| )/\1--compiler_flags=--externs=/g'`
 
+GEN_TEMPLATES_DIR=${GEN_DIR}/templates/
+GEN_TEMPLATES=${GEN_TEMPLATES_DIR}/templates.js
+
 DEPLOY_JS=${GEN_DIR}/pifuxelck.js
-DEPLOY_TEMPLATES=${GEN_DIR}/pifuxelck-templates.js
 DEPLOY_CSS=${GEN_DIR}/styles.css
 
 CLOSURE_ROOT=${THIRD_PARTY}/closure-library/
 CLOSURE_BUILDER=python ${CLOSURE_ROOT}/closure/bin/build/closurebuilder.py
 CLOSURE_COMPILER=${THIRD_PARTY}/closure-compiler/compiler.jar
-SOY_COMPILER=java -jar ${THIRD_PARTY}/closure-templates-for-javascript/SoyToJsSrcCompiler.jar
+
+SOY_ROOT=${THIRD_PARTY}/closure-templates-for-javascript/
+SOY_COMPILER=java -jar ${SOY_ROOT}/SoyToJsSrcCompiler.jar
 
 SCSS=${THIRD_PARTY}/sass/bin/scss
 
@@ -38,18 +42,19 @@ deploy : ${DEPLOY_DIR}
 
 # Generates a directory structure in ${DEPLOY_DIR} that can be deployed to the
 # HTTP server that hosts the app.
-${DEPLOY_DIR} : ${DEPLOY_JS} ${DEPLOY_CSS} ${SRCS_HTML} ${DEPLOY_TEMPLATES}
+${DEPLOY_DIR} : ${DEPLOY_JS} ${DEPLOY_CSS} ${SRCS_HTML}
 	@mkdir -p ${DEPLOY_DIR}
 	@cp ${DEPLOY_JS} ${DEPLOY_DIR}
 	@cp ${DEPLOY_CSS} ${DEPLOY_DIR}
-	@cp ${DEPLOY_TEMPLATES} ${DEPLOY_DIR}
 	@cp -R ${HTML_DIR}/* ${DEPLOY_DIR}
 
-${DEPLOY_JS} : ${SRCS_JS}
+${DEPLOY_JS} : ${SRCS_JS} ${GEN_TEMPLATES}
 	@mkdir -p ${GEN_DIR}
 	@${CLOSURE_BUILDER} \
 					--root=${CLOSURE_ROOT} \
+					--root=${SOY_ROOT} \
 					--root=${JS_DIR} \
+					--root=${GEN_TEMPLATES_DIR} \
 					--namespace=${NAMESPACE} \
 					--output_mode=${COMPILE_MODE} \
 					--compiler_flags=--warning_level=VERBOSE \
@@ -59,9 +64,12 @@ ${DEPLOY_JS} : ${SRCS_JS}
 # Add the following to the above flags if/when we have externs...
 #					${EXTERNS_FLAGS} \
 
-${DEPLOY_TEMPLATES} : ${SRCS_TEMPLATES}
+${GEN_TEMPLATES} : ${SRCS_TEMPLATES}
+	@mkdir -p ${GEN_TEMPLATES_DIR}
 	@${SOY_COMPILER} \
-		--outputPathFormat ${DEPLOY_TEMPLATES} \
+		--shouldProvideRequireSoyNamespaces \
+		--shouldGenerateJsdoc \
+		--outputPathFormat ${GEN_TEMPLATES} \
 		--srcs ${TEMPLATES_LIST}
 
 ${DEPLOY_CSS} : ${SRCS_CSS}

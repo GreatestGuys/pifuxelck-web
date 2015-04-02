@@ -11,7 +11,81 @@ $shadow_grey: #006064;
 $overlay_background: rgba(0, 0, 0, 0.5);
 
 $primaryText: rgba(0, 0, 0, 0.8);
+$primaryTextWhite: rgba(255, 255, 255, 0.8);
+$secondaryTextWhite: rgba(255, 255, 255, 0.6);
 
 body {
   background: $primary;
+  color: $primaryText;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  background: $primary;
+  color: $primaryText;
+}
+
+input.text {
+  background: $primary;
+  color: $primaryTextWhite;
+
+  border-top-style: none;
+  border-left-style: none;
+  border-right-style: none;
+  border-bottom-color: $accent;
+
+  outline-style: none;
+}
+
+.full {
+  width: 100%;
+}
+
+input.button {
+  background: $accent;
+  color: $primaryTextWhite;
+  border-style: none;
+}
+
+input.hero-button {
+  width: 100%;
+}
+
+input.big {
+  font-size: xx-large;
+  padding: 10px;
+}
+
+div.content {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+}
+
+div.hero {
+  width:500px;
+  margin-left:-250px;
+  position: absolute;
+  top: 150px;
+  left: 50%;
+}
+
+div.hero-row {
+  width: 100%;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+::-webkit-input-placeholder{
+  color: $secondaryTextWhite;
+}
+:-moz-placeholder{
+  color: $secondaryTextWhite;
+}
+::-moz-placeholder{
+  color: $secondaryTextWhite;
+}
+:-ms-input-placeholder {
+  color: $secondaryTextWhite;
 }
