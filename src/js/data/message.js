@@ -18,7 +18,7 @@ goog.require('pifuxelck.data.InboxEntry');
  *    label:   string,
  *    players: Array.<number>
  *  },
- *  inbox_entry: pifuxelck.data.InboxEntry,
+ *  inbox_entrise: Array.<!pifuxelck.data.InboxEntry>,
  *  games: Array.<!pifuxelck.data.Game>
  * }}
  */

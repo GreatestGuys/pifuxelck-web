@@ -149,7 +149,7 @@ pifuxelck.api.ApiImpl.prototype.newGame = function(label, players) {
 pifuxelck.api.ApiImpl.prototype.inbox = function() {
   return this.makeApiCall_(
       '/api/2/games/inbox',
-      function(response, resolve, reject) {resolve(response);});
+      function(response, resolve, reject) {resolve(response['inbox_entries']);});
 };
 
 
@@ -180,5 +180,5 @@ pifuxelck.api.ApiImpl.prototype.move = function(gameId, turn) {
 pifuxelck.api.ApiImpl.prototype.history = function(startTimeId) {
   return this.makeApiCall_(
       '/api/2/games/since/' + startTimeId,
-      function(response, resolve, reject) {resolve(response);});
+      function(response, resolve, reject) {resolve(response['games']);});
 };

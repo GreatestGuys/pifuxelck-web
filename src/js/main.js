@@ -1,4 +1,4 @@
 goog.provide('pifuxelck');
 
-goog.require('pifuxelck.api');
 goog.require('pifuxelck.controller.IndexController');
+goog.require('pifuxelck.controller.HistoryController');
