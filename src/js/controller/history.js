@@ -3,6 +3,7 @@ goog.provide('pifuxelck.controller.HistoryController');
 goog.require('pifuxelck.api');
 goog.require('pifuxelck.controller.BaseController');
 goog.require('pifuxelck.data.DataStore');
+goog.require('pifuxelck.ui.Drawing');
 goog.require('pifuxelck.ui.soy.history');
 goog.require('soy');
 
@@ -51,9 +52,11 @@ pifuxelck.controller.HistoryController.prototype.loadHistory_ = function(db) {
       });
       for (var i = history.length - 1; i >= 0; --i) {
         var entry = history[i];
-        this.grid_.appendChild(soy.renderAsFragment(
+        var fragment = soy.renderAsFragment(
             pifuxelck.ui.soy.history.entry,
-            {'label': entry['turns'][0]['label']}));
+            {'label': entry['turns'][0]['label']});
+        this.grid_.appendChild(fragment);
+        this.renderDrawing_(fragment, entry);
       }
     }, this);
 
@@ -106,4 +109,16 @@ pifuxelck.controller.HistoryController.prototype.loadHistory_ = function(db) {
     // Perform the first history loading step.
     step();
   }, this));
+};
+
+
+pifuxelck.controller.HistoryController.prototype.renderDrawing_ = function(
+    fragment,
+    game) {
+  var turns = game['turns'];
+  var drawing = new pifuxelck.ui.Drawing(fragment.children[0]);
+  if (turns.length > 1) {
+    drawing.setDrawing(turns[1]['drawing']);
+  }
+  drawing.updateCanvas();
 };

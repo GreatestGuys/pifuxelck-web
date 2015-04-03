@@ -18,9 +18,12 @@ $secondaryTextWhite: rgba(255, 255, 255, 0.6);
 $transparent: rgba(0, 0, 0, 0);
 
 $navbar-height: 50px;
-$grid-margin: 10px;
+
 $list-element-min-height: 50px;
 $list-width: 500px;
+
+$grid-size: 250px;
+$grid-margin: 10px;
 
 body {
   background: $backgroundGrey;
@@ -76,10 +79,10 @@ body {
 }
 
 .grid-element {
-  width: 250px;
-  min-height: 250px;
+  width: $grid-size;
+  min-height: $grid-size;
   margin: $grid-margin;
-  display:inline-block;
+  display: inline-table;
   background: white;
 
   border-bottom-style: solid;
@@ -88,6 +91,40 @@ body {
   border-right-width: 2px;
   border-bottom-color: $shadowGrey;
   border-right-color: $shadowGrey;
+}
+
+.grid-element-label {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  width: $grid-size;
+  margin-top: 0 - ($grid-size / 5 * 3);
+  vertical-align: middle;
+  font-weight: 500;
+}
+
+.grid-element-drawing {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  width: $grid-size;
+  height: $grid-size;
+  opacity: 0.2;
+}
+
+.grid-element-drawing > canvas {
+  position: relative;
+  width: $grid-size;
+  height: $grid-size;
+  left: 0px;
+  top: 0px;
+}
+
+.grid-element-drawing > canvas.first {
+}
+
+.grid-element-drawing > canvas.second {
+  margin-top: 0 - $grid-size;
 }
 
 .fab {

@@ -78,7 +78,8 @@ ${GEN_TEMPLATES} : ${SRCS_TEMPLATES}
 ${DEPLOY_CSS} : ${SRCS_CSS}
 	@echo "[+] Compiling SASS CSS."
 	@mkdir -p ${GEN_DIR}
-	@scss ${SRCS_CSS} > ${DEPLOY_CSS}
+	@echo > ${DEPLOY_CSS}
+	@(echo ${SRCS_CSS} | xargs -n 1 scss) >> ${DEPLOY_CSS}
 
 clean :
 	@rm -Rf ${OUT_DIR}

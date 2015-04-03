@@ -1,0 +1,22 @@
+div.fullScreen, canvas.fullScreen {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+canvas.frontBuffer {
+  z-index: 1;
+  visibility: visible;
+}
+
+canvas.backBuffer {
+  z-index: 0;
+  visibility: hidden;
+}
+
+canvas.midBuffer {
+  z-index: 0;
+  visibility: hidden;
+}

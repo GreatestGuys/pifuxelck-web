@@ -47,14 +47,14 @@ pifuxelck.ui.graphics.Canvas = function(container) {
   /** @private {HTMLCanvasElement} */
   this.frontBuffer_ =
       /** @type {HTMLCanvasElement} */ (goog.dom.createDom('canvas', {
-        'class': 'fullScreen frontBuffer'
+        'class': 'first frontBuffer'
       }));
 
 
   /** @private {HTMLCanvasElement} */
   this.backBuffer_ =
       /** @type {HTMLCanvasElement} */ (goog.dom.createDom('canvas', {
-        'class': 'fullScreen backBuffer'
+        'class': 'second backBuffer'
       }));
 
   // Add the canvases to the container element.

@@ -4,5 +4,10 @@
  * @param label The label of this particular history entry.
  */
 {template .entry}
-<div class="grid-element">{$label}</div>
+<div class="grid-element">
+  <div class="grid-element-drawing"></div>
+  <div class="grid-element-label">
+    {$label}
+  </div>
+</div>
 {/template}
