@@ -4,9 +4,12 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="pifuxelck.js"></script>
   </head>
-  <body>
+  <body class="primary-background">
   <div class="content primary-background">
     <div class="hero">
+      <div class="hero-row" style="vertical-align: top; text-align: center; margin-bottom: 50px;">
+        <span class="huge">pifuxelck</span>(shitty edition)
+      </div>
       <div class="hero-row">
         <input placeholder="Username" id="username" type="text" class="text big full" />
       </div>
@@ -14,12 +17,13 @@
         <input placeholder="Password" id="password" type="password" class="text big full" />
       </div>
       <div class="hero-row">
-        <input value="Login" id="login" type="submit" class="button big full" />
+        <input value="Login" id="login" type="button" class="button big full" />
       </div>
       <div class="hero-row">
         <input value="Join" id="join" type="button" class="button big full" />
       </div>
     </div>
   </div>
+  <script>new pifuxelck.controller.IndexController();</script>
   </body>
 </html>

@@ -6,7 +6,6 @@ $accentDark: #4A148C;
 $accentLight: #CE93D8;
 
 $backgroundGrey: #CFD8DC;
-// $shadowGrey: #006064;
 $shadowGrey: rgba(0, 96, 100, 0.4);
 
 $overlayBackground: rgba(0, 0, 0, 0.5);
@@ -25,7 +24,7 @@ $list-width: 500px;
 
 body {
   background: $backgroundGrey;
-  color: $primaryText;
+  color: $primaryTextWhite;
 
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
@@ -52,6 +51,8 @@ body {
   margin-top: $list-element-min-height;
   left: 50%;
   margin-left: 0 - ($list-width / 2);
+
+  color: $primaryText;
 }
 
 .list-element {
@@ -70,6 +71,8 @@ body {
   height: 100%;
   width: 100%;
   text-align: center;
+
+  color: $primaryText;
 }
 
 .grid-element {
@@ -96,6 +99,13 @@ body {
   border-radius: 50%;
   background: $accent;
   font-size: 64px;
+
+  border-bottom-style: solid;
+  border-right-style: solid;
+  border-bottom-width: 3px;
+  border-right-width: 3px;
+  border-bottom-color: $accentDark;
+  border-right-color: $accentDark;
 }
 
 .fab > a {
@@ -146,8 +156,11 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  background: $primary;
-  color: $primaryText;
+  text-align: center;
+  color: $primaryTextWhite;
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
 }
 
 input {
@@ -181,8 +194,13 @@ input.hero-button {
   width: 100%;
 }
 
-input.big {
+.big {
   font-size: xx-large;
+  padding: 10px;
+}
+
+.huge {
+  font-size: 64px;
   padding: 10px;
 }
 
@@ -202,7 +220,7 @@ div.hero {
   width:500px;
   margin-left:-250px;
   position: absolute;
-  top: 150px;
+  top: 100px;
   left: 50%;
 }
 

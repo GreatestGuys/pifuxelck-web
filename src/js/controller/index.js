@@ -9,7 +9,7 @@ goog.require('pifuxelck.controller.BaseController');
  * @constructor
  */
 pifuxelck.controller.IndexController = function() {
-  pifuxelck.controller.BaseController.call(this);
+  pifuxelck.controller.BaseController.call(this, true);
 
   /** @private {Element} */
   this.userInput_ = document.getElementById('username');

@@ -89,6 +89,7 @@ pifuxelck.api.ApiImpl.prototype.loggedIn = function() {
 /** @inheritDoc */
 pifuxelck.api.ApiImpl.prototype.logout = function() {
   this.authTokenStorage_.setToken('');
+  this.authTokenStorage_.setId(0);
 };
 
 
@@ -107,6 +108,8 @@ pifuxelck.api.ApiImpl.prototype.registerAccount = function(name, password) {
 pifuxelck.api.ApiImpl.prototype.login = function(name, password) {
   var saveAuthToken = goog.bind(function(response, resolve, reject) {
     var authToken = response['meta']['auth'];
+    var id = response['user']['id'];
+    this.authTokenStorage_.setId(id);
     this.authTokenStorage_.setToken(authToken);
     resolve(authToken);
   }, this);

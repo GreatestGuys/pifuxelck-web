@@ -6,12 +6,17 @@ goog.require('pifuxelck.api.Api');
 
 
 /**
+ * @param {boolean=} opt_allowLoggedOut
  * @constructor
  */
-pifuxelck.controller.BaseController = function() {
+pifuxelck.controller.BaseController = function(opt_allowLoggedOut) {
 
   /** @private {pifuxelck.api.Api} */
   this.api_ = pifuxelck.api.newApi();
+
+  if (!opt_allowLoggedOut && !this.api_.loggedIn()) {
+    window.location = 'index.html';
+  }
 };
 
 
