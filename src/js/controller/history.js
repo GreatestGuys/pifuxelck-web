@@ -1,6 +1,5 @@
 goog.provide('pifuxelck.controller.HistoryController');
 
-goog.require('pifuxelck.api');
 goog.require('pifuxelck.controller.BaseController');
 goog.require('pifuxelck.data.DataStore');
 goog.require('pifuxelck.ui.Drawing');
@@ -54,7 +53,10 @@ pifuxelck.controller.HistoryController.prototype.loadHistory_ = function(db) {
         var entry = history[i];
         var fragment = soy.renderAsFragment(
             pifuxelck.ui.soy.history.entry,
-            {'label': entry['turns'][0]['label']});
+            {
+              'label': entry['turns'][0]['label'],
+              'gameId': entry['id']
+            });
         this.grid_.appendChild(fragment);
         this.renderDrawing_(fragment, entry);
       }

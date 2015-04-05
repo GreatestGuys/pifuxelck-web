@@ -2,12 +2,15 @@
 /**
  * An entry in the grid of completed games.
  * @param label The label of this particular history entry.
+ * @param gameId The id of this game.
  */
 {template .entry}
 <div class="grid-element">
-  <div class="grid-element-drawing"></div>
-  <div class="grid-element-label">
-    {$label}
-  </div>
+    <div class="grid-element-drawing"></div>
+    <div class="grid-element-label">
+      <a href="game.html?game={$gameId}">
+        {$label}
+      </a>
+    </div>
 </div>
 {/template}
