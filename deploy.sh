@@ -19,7 +19,7 @@ ssh \
 
 echo -e "${BWhite}[+] ${BYellow}Copying new deployment...${Color_Off}"
 scp \
-  out/dist/* \
+  out/deploy/* \
   $USER@everythingissauce.com:/srv/pifuxelck-web/
 
 echo -e "${BWhite}[+] ${BGreen}All done!${Color_Off}"
