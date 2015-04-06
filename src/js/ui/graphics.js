@@ -132,7 +132,7 @@ pifuxelck.ui.graphics.Canvas.prototype.getHeight = function() {
  * Set the fill color.
  * @param {pifuxelck.ui.graphics.Color} color The fill color.
  */
-pifuxelck.ui.graphics.Canvas.prototype.colorToStyle_ = function(color) {
+pifuxelck.ui.graphics.colorToStyle = function(color) {
   return 'rgba(' +
       255 * color.red + ', ' +
       255 * color.green + ', ' +
@@ -146,7 +146,7 @@ pifuxelck.ui.graphics.Canvas.prototype.colorToStyle_ = function(color) {
  * @param {pifuxelck.ui.graphics.Color} color The fill color.
  */
 pifuxelck.ui.graphics.Canvas.prototype.setFillColor = function(color) {
-  this.getContext().fillStyle = this.colorToStyle_(color);
+  this.getContext().fillStyle = pifuxelck.ui.graphics.colorToStyle(color);
 };
 
 
@@ -155,7 +155,7 @@ pifuxelck.ui.graphics.Canvas.prototype.setFillColor = function(color) {
  * @param {pifuxelck.ui.graphics.Color} color The stroke color.
  */
 pifuxelck.ui.graphics.Canvas.prototype.setStrokeColor = function(color) {
-  this.getContext().strokeStyle = this.colorToStyle_(color);
+  this.getContext().strokeStyle = pifuxelck.ui.graphics.colorToStyle(color);
 };
 
 

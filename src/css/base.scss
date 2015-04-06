@@ -14,6 +14,11 @@ body {
   font-weight: 300;
 }
 
+a {
+  color: $primaryTextWhite;
+  text-decoration: none;
+}
+
 .list-header {
   position: relative;
   margin-top: $navbar-height + 2 * $grid-margin;

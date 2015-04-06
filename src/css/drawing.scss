@@ -1,0 +1,77 @@
+@import "common.scss";
+
+$drawing-size: 75vh;
+$drawing-margin: 50px;
+$drawing-overlay-button-size: 50px;
+
+.drawing-container {
+  position: absolute;
+  top: $navbar-height;
+  left: 50%;
+  margin-top: $drawing-margin;
+  margin-bottom: $drawing-margin;
+  margin-left: 0 - ($drawing-size / 2);
+
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+  @include drop-shadow;
+}
+
+.options {
+  background: $accent;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+
+.option {
+  margin: 0px 25px;
+}
+
+.drawing-overlay {
+  width: $drawing-size;
+  height: $drawing-size;
+  position: absolute;
+  background: $overlayBackground;
+}
+
+.drawing-overlay-hidden {
+  z-index: -1;
+}
+
+.drawing-overlay > .button {
+  width: $drawing-overlay-button-size;
+  height: $drawing-overlay-button-size;
+  position: relative;
+  float: left;
+  margin: 10px;
+}
+
+.drawing-overlay > .button > .size {
+  border-radius: 100%;
+  border-style: solid;
+  border-color: white;
+  border-width: 3px;
+  background: black;
+}
+
+.drawing-overlay > .button > .color {
+  border-radius: 100%;
+  width: 100%;
+  height: 100%;
+}
+
+.drawing {
+  width: $drawing-size;
+  height: $drawing-size;
+  background: white;
+}
+
+.drawing > canvas.first {
+}
+
+.drawing > canvas.second {
+  margin-top: -100%;
+}

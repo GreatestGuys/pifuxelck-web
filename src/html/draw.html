@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,500' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="pifuxelck.js"></script>
+  </head>
+  <body>
+  <div class="content">
+    <div class="navbar">
+      <a href="#" class="navbar-header">Draw</a>
+      <a href="inbox.html" class="navbar-entry">Inbox</a>
+      <a href="history.html" class="navbar-entry">History</a>
+      <a href="contacts.html" class="navbar-entry">Contacts</a>
+    </div>
+
+    <div id="drawing-container" class="drawing-container">
+      <div id="overlay" class="drawing-overlay drawing-overlay-hidden"></div>
+      <div id="drawing" class="drawing"></div>
+      <div id="options" class="options">
+        <div id="size-button" class="option">
+          <a href="#">size</a>
+        </div>
+        <div id="color-button" class="option">
+          <a href="#">color</a>
+        </div>
+        <div id="background-button" class="option">
+          <a href="#">background</a>
+        </div>
+        <div id="undo-button" class="option">
+          <a href="#">undo</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="fab"><a href="#">></a></div>
+  </div>
+  <script>new pifuxelck.controller.DrawController();</script>
+  </body>
+</html>

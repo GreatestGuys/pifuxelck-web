@@ -50,7 +50,7 @@ ${DEPLOY_DIR} : ${DEPLOY_JS} ${DEPLOY_CSS} ${SRCS_HTML}
 	@cp -R ${HTML_DIR}/* ${DEPLOY_DIR}
 
 ${DEPLOY_JS} : ${SRCS_JS} ${GEN_TEMPLATES}
-	echo "[+] Compiling JavaScript."
+	@echo "[+] Compiling JavaScript."
 	@mkdir -p ${GEN_DIR}
 	@${CLOSURE_BUILDER} \
 					--root=${CLOSURE_ROOT} \
