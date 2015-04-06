@@ -1,23 +1,4 @@
-$primary: #00BCD4;
-$primaryDark: #006064;
-
-$accent: #9C27B0;
-$accentDark: #4A148C;
-$accentLight: #CE93D8;
-
-$backgroundGrey: #CFD8DC;
-$shadowGrey: rgba(0, 96, 100, 0.4);
-
-$overlayBackground: rgba(0, 0, 0, 0.5);
-
-$primaryText: rgba(0, 0, 0, 0.8);
-$secondaryText: rgba(0, 0, 0, 0.6);
-$primaryTextWhite: rgba(255, 255, 255, 0.8);
-$secondaryTextWhite: rgba(255, 255, 255, 0.6);
-
-$transparent: rgba(0, 0, 0, 0);
-
-$navbar-height: 50px;
+@import "common.scss";
 
 $list-element-min-height: 50px;
 $list-width: 500px;
@@ -85,12 +66,7 @@ body {
   display: inline-table;
   background: white;
 
-  border-bottom-style: solid;
-  border-right-style: solid;
-  border-bottom-width: 2px;
-  border-right-width: 2px;
-  border-bottom-color: $shadowGrey;
-  border-right-color: $shadowGrey;
+  @include drop-shadow;
 }
 
 .grid-element-label {
@@ -137,12 +113,7 @@ body {
   background: $accent;
   font-size: 64px;
 
-  border-bottom-style: solid;
-  border-right-style: solid;
-  border-bottom-width: 3px;
-  border-right-width: 3px;
-  border-bottom-color: $accentDark;
-  border-right-color: $accentDark;
+  @include drop-shadow;
 }
 
 .fab > a {
