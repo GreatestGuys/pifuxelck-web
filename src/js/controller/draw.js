@@ -35,12 +35,12 @@ controller.DrawController = function() {
   /** @private {!Element} */
   this.overlayDiv_ = document.getElementById('overlay');
 
-  /** @private {!ui.Drawing} */
+  /** @private {!data.Drawing} */
   this.drawing_ = data.newEmptyDrawing();
 
   /** @private {!ui.Drawing} */
   this.drawingUi_ = new ui.Drawing(this.drawingDiv_);
-  this.drawingUi_.setDrawing(drawing);
+  this.drawingUi_.setDrawing(this.drawing_);
 
   /** @private {!data.Color} */
   this.strokeColor_ = ui.graphics.newColor(0, 0, 0, 1);
@@ -136,7 +136,6 @@ controller.DrawController.prototype.showBackgroundColors_ = function() {
   this.showOverlay_();
   this.showColors_(goog.bind(function(color) {
     this.drawing_['background_color'] = color;
-    this.drawingUi_.setDrawing(this.drawing_);
     this.drawingUi_.updateCanvas();
   }, this));
 };
@@ -195,7 +194,6 @@ controller.DrawController.prototype.onMouseDown_ = function(e) {
 
 controller.DrawController.prototype.undo_ = function(e) {
   this.drawing_['lines'].pop();
-  this.drawingUi_.setDrawing(this.drawing_);
   this.drawingUi_.updateCanvas();
 };
 
@@ -208,7 +206,6 @@ controller.DrawController.prototype.onMouseUp_ = function(e) {
   this.drawing_['lines'].push(this.inProgressLine_);
   this.inProgressLine_ = undefined;
 
-  this.drawingUi_.setDrawing(this.drawing_);
   this.drawingUi_.setLine(undefined);
   this.drawingUi_.updateCanvas();
 };
@@ -218,6 +215,8 @@ controller.DrawController.prototype.onMouseMove_ = function(e) {
   if (this.inProgressLine_ == undefined) {
     return;
   }
+
+  // TODO: filter out coordinates that are too close the last set of points.
 
   var boundingBox = this.drawingDiv_.getBoundingClientRect();
   var size = boundingBox.width;
