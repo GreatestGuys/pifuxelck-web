@@ -193,6 +193,18 @@ input.text {
   outline-style: none;
 }
 
+input.darktext {
+  background: $transparent;
+  color: $primaryText;
+
+  border-top-style: none;
+  border-left-style: none;
+  border-right-style: none;
+  border-bottom-color: $accent;
+
+  outline-style: none;
+}
+
 .full {
   width: 100%;
 }
@@ -217,7 +229,7 @@ input.hero-button {
   padding: 10px;
 }
 
-input.darktext {
+.darktext {
   color: $primaryText;
 }
 
@@ -241,6 +253,10 @@ div.hero-row {
   width: 100%;
   margin-top: 25px;
   margin-bottom: 25px;
+}
+
+.hidden {
+  display: none;
 }
 
 ::-webkit-input-placeholder{

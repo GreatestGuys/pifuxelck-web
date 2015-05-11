@@ -38,9 +38,17 @@ pifuxelck.data.DataStore = function() {
       console.log('upgrading shit...');
       var db = event.target.result;
 
-      var historyStore = db.createObjectStore(
-          pifuxelck.data.DataStore.HISTORY_STORE_,
-          {keyPath: 'id'});
+      if (event.oldVersion < 1) {
+        db.createObjectStore(
+            pifuxelck.data.DataStore.HISTORY_STORE_,
+            {keyPath: 'id'});
+      }
+
+      if (event.oldVersion < 2) {
+        db.createObjectStore(
+            pifuxelck.data.DataStore.CONTACTS_STORE_,
+            {keyPath: 'id'});
+      }
     };
   }, this);
 };
@@ -51,11 +59,15 @@ pifuxelck.data.DataStore.DB_NAME_PREFIX_ = 'pifuxelck-data-store-';
 
 
 /** @const @private {number} */
-pifuxelck.data.DataStore.DB_VERSION_ = 1;
+pifuxelck.data.DataStore.DB_VERSION_ = 2;
 
 
 /** @const @private {string} */
 pifuxelck.data.DataStore.HISTORY_STORE_ = 'history';
+
+
+/** @const @private {string} */
+pifuxelck.data.DataStore.CONTACTS_STORE_ = 'contacts';
 
 
 /**
@@ -73,6 +85,15 @@ pifuxelck.data.DataStore.prototype.getDbName_ = function() {
  */
 pifuxelck.data.DataStore.prototype.withHistory = function(f) {
   return this.getObjectStore_(pifuxelck.data.DataStore.HISTORY_STORE_).then(f);
+};
+
+
+/**
+ * Obtain the object store that contains the user's contacts list.
+ * @param {function(!goog.Promise.<!goog.db.ObjectStore>)}
+ */
+pifuxelck.data.DataStore.prototype.withContacts = function(f) {
+  return this.getObjectStore_(pifuxelck.data.DataStore.CONTACTS_STORE_).then(f);
 };
 
 

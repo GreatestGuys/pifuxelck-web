@@ -2,15 +2,12 @@ goog.provide('pifuxelck.data.Message');
 
 goog.require('pifuxelck.data.Game');
 goog.require('pifuxelck.data.InboxEntry');
+goog.require('pifuxelck.data.User');
 
 
 /**
  * @typedef{{
- *  user: {
- *    id:           number,
- *    display_name: string,
- *    password:     string
- *  },
+ *  user: pifuxelck.data.User,
  *  meta: {
  *    auth: string
  *  },

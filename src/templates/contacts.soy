@@ -1,0 +1,15 @@
+{namespace pifuxelck.ui.soy.contacts}
+
+
+/**
+ * @param display_name The display name.
+ */
+{template .contactInList}
+<div class="list-element">
+  {$display_name}
+  <input value="Remove"
+         type="button"
+         class="button"
+         style="position:absolute; right: 0px; height: 50px" />
+</div>
+{/template}

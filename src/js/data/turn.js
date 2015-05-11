@@ -7,22 +7,13 @@ goog.require('pifuxelck.data.Drawing');
 /**
  * @export
  * @typedef {{
- *    type:     pifuxelck.data.TurnType,
- *    contents: (string|pifuxelck.data.Drawing),
- *    player:   ?string
+ *    is_drawing: boolean,
+ *    drawing:    pifuxelck.data.Drawing,
+ *    label:      ?string,
+ *    player:     ?string
  * }}
  */
 pifuxelck.data.Turn;
-
-
-/**
- * @export
- * @enum {string}
- */
-pifuxelck.data.TurnType = {
-  DRAWING: 'drawing',
-  LABEL: 'label'
-};
 
 
 /**
@@ -33,8 +24,8 @@ pifuxelck.data.TurnType = {
  */
 pifuxelck.data.newDrawingTurn = function(drawing, opt_player) {
   return {
-    'type': pifuxelck.data.TurnType.DRAWING,
-    'contents': drawing,
+    'is_drawing': true,
+    'drawing': drawing,
     'player': opt_player || null
   };
 };
@@ -48,8 +39,8 @@ pifuxelck.data.newDrawingTurn = function(drawing, opt_player) {
  */
 pifuxelck.data.newLabelTurn = function(label, opt_player) {
   return {
-    'type': pifuxelck.data.TurnType.LABEL,
-    'contents': label,
+    'is_drawing': false,
+    'label': label,
     'player': opt_player || null
   };
 };

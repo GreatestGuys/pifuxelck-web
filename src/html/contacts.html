@@ -13,17 +13,18 @@
     </div>
 
     <div class="list-header">
-      <input placeholder="Lookup a username..." id="label" class="big text full darktext" />
+      <input placeholder="Lookup a username..."
+             id="username-lookup"
+             class="big full darktext" />
+      <input value="Add Contact"
+             id="add-contact"
+             type="button"
+             class="button big full hidden" />
     </div>
-    <div class="list">
-      <div class="list-element">SWPhantom</div>
-      <div class="list-element">cosmo</div>
-      <div class="list-element">graham</div>
-      <div class="list-element">jesse</div>
-      <div class="list-element">will</div>
+    <div id="contacts-list" class="list">
     </div>
 
   </div>
-  <script>new pifuxelck.controller.IndexController();</script>
+  <script>new pifuxelck.controller.ContactsController();</script>
   </body>
 </html>

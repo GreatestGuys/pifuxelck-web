@@ -51,6 +51,10 @@ controller.DrawController = function() {
   /** @private {data.Line} */
   this.inProgressLine_ = undefined;
 
+  var uri = new goog.Uri(window.location.href);
+  /** @private {number} */
+  this.gameId_ = parseInt(uri.getQueryData().get('game'));
+
   document.getElementById('size-button').onclick =
     goog.bind(this.showSizes_, this);
 
@@ -62,6 +66,9 @@ controller.DrawController = function() {
 
   document.getElementById('undo-button').onclick =
     goog.bind(this.undo_, this);
+
+  document.getElementById('fab-button').onclick =
+    goog.bind(this.onFabClick_, this);
 
   this.drawingDiv_.onmousedown = goog.bind(this.onMouseDown_, this);
   document.onmousemove = goog.bind(this.onMouseMove_, this);
@@ -110,6 +117,19 @@ controller.DrawController.COLORS_ = [
   newColor(139, 0, 139), newColor(208, 32, 144), newColor(255, 20, 147),
   newColor(255, 0, 255), newColor(219, 112, 147), newColor(255, 182, 193)
 ];
+
+
+controller.DrawController.prototype.onFabClick_ = function() {
+  var onSuccess = function() {
+    window.location.href = 'inbox.html';
+  };
+  var onFailure = function() {
+    alert('Unable to submit turn at this time.');
+  };
+  this.getApi()
+    .move(this.gameId_, data.newDrawingTurn(this.drawing_))
+    .then(onSuccess, onFailure, this);
+};
 
 
 controller.DrawController.prototype.showOverlay_ = function() {
