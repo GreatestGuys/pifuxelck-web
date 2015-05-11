@@ -215,6 +215,10 @@ input.button {
   border-style: none;
 }
 
+input.unchecked {
+  background: $shadowGrey;
+}
+
 input.hero-button {
   width: 100%;
 }

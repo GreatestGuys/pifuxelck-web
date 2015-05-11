@@ -4,7 +4,6 @@ goog.require('goog.dom');
 goog.require('goog.dom.classes');
 goog.require('pifuxelck.api');
 goog.require('pifuxelck.controller.BaseController');
-goog.require('pifuxelck.data.DataStore');
 goog.require('pifuxelck.data.User');
 goog.require('pifuxelck.ui.soy.contacts');
 
@@ -21,9 +20,6 @@ pifuxelck.controller.ContactsController = function() {
 
   /** @private {Element} */
   this.contactsList_ = document.getElementById('contacts-list');
-
-  /** @private {pifuxelck.data.DataStore} */
-  this.dataStore_ = new pifuxelck.data.DataStore();
 
   /** @private {Element} */
   this.addContactButton_ = document.getElementById('add-contact');
@@ -55,10 +51,13 @@ pifuxelck.controller.ContactsController.prototype.onLookupChange_ = function() {
   }, this);
 
   var onSuccess = goog.bind(function(id) {
-    if (this.userInput_.value != displayName) {
+    if (this.userInput_.value != displayName ||
+        // Do not add yourself as a contact.
+        id == this.getAuthStore().getId()) {
       onFailure();
       return;
     }
+
     goog.dom.classes.remove(this.addContactButton_, 'hidden');
     this.currentContact_ = {'id': id, 'display_name': displayName};
   }, this);
@@ -83,7 +82,7 @@ pifuxelck.controller.ContactsController.prototype.loadContacts_ = function() {
     this.contactsList_.appendChild(fragment);
   }, this);
 
-  this.dataStore_.withContacts(goog.bind(function(db) {
+  this.getDataStore().withContacts(goog.bind(function(db) {
     db.getAll().then(goog.bind(function(contacts) {
       goog.dom.removeChildren(this.contactsList_);
 
@@ -96,7 +95,7 @@ pifuxelck.controller.ContactsController.prototype.loadContacts_ = function() {
 
 
 pifuxelck.controller.ContactsController.prototype.addContact_ = function() {
-  this.dataStore_.withContacts(goog.bind(function(db) {
+  this.getDataStore().withContacts(goog.bind(function(db) {
     if (!this.currentContact_) {
       return;
     }
@@ -109,7 +108,7 @@ pifuxelck.controller.ContactsController.prototype.addContact_ = function() {
 
 pifuxelck.controller.ContactsController.prototype.removeContact_ =
     function(contact) {
-  this.dataStore_.withContacts(goog.bind(function(db) {
+  this.getDataStore().withContacts(goog.bind(function(db) {
     db.remove(contact['id'])
       .then(goog.bind(this.loadContacts_, this));
   }, this));
