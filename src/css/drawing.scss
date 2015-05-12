@@ -3,10 +3,30 @@
 $drawing-size: 75vh;
 $drawing-margin: 50px;
 $drawing-overlay-button-size: 50px;
+$drawing-label-height: 50px;
+$drawing-label-margin: 25px;
+
+.drawing-label {
+  position: absolute;
+  top: $navbar-height;
+  width: $drawing-size;
+  height: $drawing-label-height;
+  left: 50%;
+  margin-top: $drawing-margin;
+  margin-bottom: $drawing-label-margin;
+  margin-left: 0 - ($drawing-size / 2);
+
+  background: white;
+  font-size: xx-large;
+  text-align: center;
+  vertical-align: middle;
+
+  @include drop-shadow;
+}
 
 .drawing-container {
   position: absolute;
-  top: $navbar-height;
+  top: $navbar-height + $drawing-label-margin + $drawing-label-height;
   left: 50%;
   margin-top: $drawing-margin;
   margin-bottom: $drawing-margin;

@@ -1,4 +1,6 @@
 {namespace pifuxelck.ui.soy.history}
+
+
 /**
  * An entry in the grid of completed games.
  * @param label The label of this particular history entry.
@@ -9,7 +11,11 @@
     <div class="grid-element-drawing"></div>
     <div class="grid-element-label">
       <a href="game.html?game={$gameId}" class="darktext">
-        {$label}
+        {if $label}
+          {$label}
+        {else}
+          &nbsp;
+        {/if}
       </a>
     </div>
 </div>

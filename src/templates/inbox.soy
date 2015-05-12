@@ -1,0 +1,30 @@
+{namespace pifuxelck.ui.soy.inbox}
+
+
+/**
+ * @param label The label of this particular history entry.
+ * @param gameId The id of this game.
+ */
+{template .label}
+<div class="grid-element">
+  <a href="draw.html?label={$label}&game={$gameId}" class="darktext">
+    <div class="grid-element-drawing"></div>
+    <div class="grid-element-label">
+        {$label}
+    </div>
+  </a>
+</div>
+{/template}
+
+
+/**
+ * @param gameId The id of this game.
+ */
+{template .drawing}
+<div class="grid-element">
+  <a href="label.html?game={$gameId}" class="darktext">
+    <div class="grid-element-drawing"></div>
+    <div class="grid-element-label">&nbsp;</div>
+  </a>
+</div>
+{/template}

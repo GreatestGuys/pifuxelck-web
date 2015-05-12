@@ -2,6 +2,7 @@ goog.provide('pifuxelck.controller.DrawController');
 
 goog.require('goog.dom');
 goog.require('goog.dom.classes');
+goog.require('goog.string');
 goog.require('pifuxelck.controller.BaseController');
 goog.require('pifuxelck.data.DataStore');
 goog.require('pifuxelck.ui.Drawing');
@@ -33,6 +34,9 @@ controller.DrawController = function() {
   this.drawingDiv_ = document.getElementById('drawing');
 
   /** @private {!Element} */
+  this.labelDiv_ = document.getElementById('drawing-label');
+
+  /** @private {!Element} */
   this.overlayDiv_ = document.getElementById('overlay');
 
   /** @private {!data.Drawing} */
@@ -54,6 +58,11 @@ controller.DrawController = function() {
   var uri = new goog.Uri(window.location.href);
   /** @private {number} */
   this.gameId_ = parseInt(uri.getQueryData().get('game'));
+
+  /** @private {number} */
+  this.label_ = uri.getQueryData().get('label');
+
+  this.labelDiv_.appendChild(document.createTextNode(this.label_));
 
   document.getElementById('size-button').onclick =
     goog.bind(this.showSizes_, this);

@@ -42,9 +42,9 @@ goog.inherits(pifuxelck.api.ApiImpl, pifuxelck.api.Api);
 /**
  * Make a call to the API server.
  * @param {string} path the path to request
- * @param {function(!Object, function(!T), function(*))} f the transform to apply
- *     to the body, the first parameter is used to resolve the value, the second
- *     to reject it
+ * @param {function(!Object, function(!T), function(*))} f the transform to
+ *     apply to the body, the first parameter is used to resolve the value, the
+ *     second to reject it
  * @param {string=} opt_method the HTTP method to use when making the request
  * @param {Object|Array|string=} opt_body the body of the request
  * @template T
@@ -131,7 +131,8 @@ pifuxelck.api.ApiImpl.prototype.lookupUserId = function(displayName) {
 /**
  * Creates a new game.
  * @param {string} label the initial label
- * @param {!Array<number>} players a list IDs of players that are to be included in the game
+ * @param {!Array<number>} players a list IDs of players that are to be included
+ *                                 in the game
  * @return {goog.Promise} a future that resolves if the game was created
  */
 pifuxelck.api.ApiImpl.prototype.newGame = function(label, players) {
@@ -152,24 +153,27 @@ pifuxelck.api.ApiImpl.prototype.newGame = function(label, players) {
 pifuxelck.api.ApiImpl.prototype.inbox = function() {
   return this.makeApiCall_(
       '/api/2/games/inbox',
-      function(response, resolve, reject) {resolve(response['inbox_entries']);});
+      function(response, resolve, reject) {
+        resolve(response['inbox_entries'] || []);
+      });
 };
 
 
 /**
  * Submit a turn for an active game.
  * @param {number} gameId the ID of the game
- * @param {!pifuxelck.data.Turn} turn the turn that is to be submitted. It is not necessary for
- *             the player ID of the turn to be filled in as it will be
- *             inferred by the logged in state of the user.
- * @return {!goog.Promise} a future that resolves if submitting the move succeeded
+ * @param {!pifuxelck.data.Turn} turn the turn that is to be submitted. It is
+ *     not necessary for the player ID of the turn to be filled in as it will be
+ *     inferred by the logged in state of the user.
+ * @return {!goog.Promise} a future that resolves if submitting the move
+ *     succeeded
  */
 pifuxelck.api.ApiImpl.prototype.move = function(gameId, turn) {
   var body = {'turn': turn};
   return this.makeApiCall_(
       '/api/2/games/play/' + gameId,
       function(response, resolve, reject) {resolve(response);},
-      'POST',
+      'PUT',
       body);
 }
 
@@ -182,6 +186,8 @@ pifuxelck.api.ApiImpl.prototype.move = function(gameId, turn) {
  */
 pifuxelck.api.ApiImpl.prototype.history = function(startTimeId) {
   return this.makeApiCall_(
-      '/api/2/games/since/' + startTimeId,
-      function(response, resolve, reject) {resolve(response['games']);});
+      '/api/2/games?since=' + startTimeId,
+      function(response, resolve, reject) {
+        resolve(response['games'] || []);
+      });
 };
