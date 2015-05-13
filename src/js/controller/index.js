@@ -7,6 +7,7 @@ goog.require('pifuxelck.controller.BaseController');
 
 /**
  * @constructor
+ * @extends {pifuxelck.controller.BaseController}
  */
 pifuxelck.controller.IndexController = function() {
   pifuxelck.controller.BaseController.call(this, true);

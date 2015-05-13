@@ -8,7 +8,7 @@ goog.require('pifuxelck.data.Drawing');
  * @export
  * @typedef {{
  *    is_drawing: boolean,
- *    drawing:    pifuxelck.data.Drawing,
+ *    drawing:    ?pifuxelck.data.Drawing,
  *    label:      ?string,
  *    player:     ?string
  * }}
@@ -26,7 +26,8 @@ pifuxelck.data.newDrawingTurn = function(drawing, opt_player) {
   return {
     'is_drawing': true,
     'drawing': drawing,
-    'player': opt_player || null
+    'player': opt_player || null,
+    'label': null
   };
 };
 
@@ -41,6 +42,7 @@ pifuxelck.data.newLabelTurn = function(label, opt_player) {
   return {
     'is_drawing': false,
     'label': label,
-    'player': opt_player || null
+    'player': opt_player || null,
+    'drawing': null
   };
 };

@@ -1,7 +1,7 @@
 goog.provide('pifuxelck.controller.ContactsController');
 
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('pifuxelck.api');
 goog.require('pifuxelck.controller.BaseController');
 goog.require('pifuxelck.data.User');
@@ -11,6 +11,7 @@ goog.require('pifuxelck.ui.soy.contacts');
 
 /**
  * @constructor
+ * @extends {pifuxelck.controller.BaseController}
  */
 pifuxelck.controller.ContactsController = function() {
   pifuxelck.controller.BaseController.call(this);
@@ -43,11 +44,11 @@ goog.exportSymbol(
 
 
 pifuxelck.controller.ContactsController.prototype.onLookupChange_ = function() {
-  var displayName = this.userInput_.value;
+  var displayName = /** @type {string} */ (this.userInput_.value);
 
   var onFailure = goog.bind(function() {
     this.currentContact_ = null;
-    goog.dom.classes.add(this.addContactButton_, 'hidden');
+    goog.dom.classlist.add(this.addContactButton_, 'hidden');
   }, this);
 
   var onSuccess = goog.bind(function(id) {
@@ -58,8 +59,12 @@ pifuxelck.controller.ContactsController.prototype.onLookupChange_ = function() {
       return;
     }
 
-    goog.dom.classes.remove(this.addContactButton_, 'hidden');
-    this.currentContact_ = {'id': id, 'display_name': displayName};
+    goog.dom.classlist.remove(this.addContactButton_, 'hidden');
+    this.currentContact_ = {
+      'id': /** @type {number} */ (id),
+      'display_name': displayName,
+      'password': null
+    };
   }, this);
 
   this.getApi()
@@ -70,9 +75,9 @@ pifuxelck.controller.ContactsController.prototype.onLookupChange_ = function() {
 
 pifuxelck.controller.ContactsController.prototype.loadContacts_ = function() {
   var addContactToList = goog.bind(function(contact) {
-    var fragment = soy.renderAsFragment(
+    var fragment = /** @type {Element} */ (soy.renderAsFragment(
         pifuxelck.ui.soy.contacts.contactInList,
-        contact);
+        contact));
 
     var removeButton = goog.dom.getElementByClass('button', fragment);
     removeButton.addEventListener(

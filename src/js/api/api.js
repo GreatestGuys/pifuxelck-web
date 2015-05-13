@@ -59,7 +59,7 @@ pifuxelck.api.Api.prototype.lookupUserId = goog.abstractMethod;
 /**
  * Creates a new game.
  * @param {string} label the initial label
- * @param {!Array<number>} players a list IDs of players that are to be included in the game
+ * @param {!Array<string>} players a list IDs of players that are to be included in the game
  * @return {goog.Promise} a future that resolves if the game was created
  */
 pifuxelck.api.Api.prototype.newGame = goog.abstractMethod;

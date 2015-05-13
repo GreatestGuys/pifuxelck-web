@@ -1,7 +1,7 @@
 goog.provide('pifuxelck.controller.NewGameController');
 
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('pifuxelck.api');
 goog.require('pifuxelck.controller.BaseController');
 goog.require('pifuxelck.data.User');
@@ -11,6 +11,7 @@ goog.require('pifuxelck.ui.soy.newgame');
 
 /**
  * @constructor
+ * @extends {pifuxelck.controller.BaseController}
  */
 pifuxelck.controller.NewGameController = function() {
   pifuxelck.controller.BaseController.call(this, true);
@@ -61,10 +62,10 @@ pifuxelck.controller.NewGameController.prototype.toggleContact_ =
     function(contact, button) {
   var id = contact['id'] + '';
   if (this.players_.indexOf(id) != -1) {
-    goog.dom.classes.add(button, 'unchecked');
+    goog.dom.classlist.add(button, 'unchecked');
     this.players_ = this.players_.filter(function(x) {return x != id});
   } else {
-    goog.dom.classes.remove(button, 'unchecked');
+    goog.dom.classlist.remove(button, 'unchecked');
     this.players_ = this.players_.concat(id);
   }
 };
@@ -72,9 +73,9 @@ pifuxelck.controller.NewGameController.prototype.toggleContact_ =
 
 pifuxelck.controller.NewGameController.prototype.loadContacts_ = function() {
   var addContactToList = goog.bind(function(contact) {
-    var fragment = soy.renderAsFragment(
+    var fragment = /** @type {Element} */ (soy.renderAsFragment(
         pifuxelck.ui.soy.newgame.contactInList,
-        contact);
+        contact));
 
     var button = goog.dom.getElementByClass('button', fragment);
     button.addEventListener(

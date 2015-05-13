@@ -89,7 +89,7 @@ pifuxelck.api.ApiImpl.prototype.loggedIn = function() {
 /** @inheritDoc */
 pifuxelck.api.ApiImpl.prototype.logout = function() {
   this.authTokenStorage_.setToken('');
-  this.authTokenStorage_.setId(0);
+  this.authTokenStorage_.setId('0');
 };
 
 

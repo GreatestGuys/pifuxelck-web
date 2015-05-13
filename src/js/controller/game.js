@@ -2,7 +2,6 @@ goog.provide('pifuxelck.controller.GameController');
 
 goog.require('goog.Uri');
 goog.require('pifuxelck.controller.BaseController');
-goog.require('pifuxelck.data.DataStore');
 goog.require('pifuxelck.ui.Drawing');
 goog.require('pifuxelck.ui.soy.game');
 goog.require('soy');
@@ -26,15 +25,12 @@ pifuxelck.controller.GameController = function() {
   /** @private {Element} */
   this.grid_ = document.getElementById('grid');
 
-  /** @private {pifuxelck.data.DataStore} */
-  this.dataStore_ = new pifuxelck.data.DataStore();
-
   var uri = new goog.Uri(window.location.href);
   /** @private {number} */
-  this.gameId_ = parseInt(uri.getQueryData().get('game'));
+  this.gameId_ = parseInt(uri.getQueryData().get('game'), 10);
 
   if (this.gameId_) {
-    this.dataStore_.withHistory(goog.bind(this.loadGame_, this));
+    this.getDataStore().withHistory(goog.bind(this.loadGame_, this));
   }
 };
 goog.inherits(controller.GameController, controller.BaseController);

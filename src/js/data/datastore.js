@@ -1,5 +1,6 @@
 goog.provide('pifuxelck.data.DataStore');
 
+goog.require('goog.db.IndexedDb');
 goog.require('goog.db.ObjectStore');
 goog.require('pifuxelck.api.AuthTokenStorage');
 
@@ -26,7 +27,7 @@ pifuxelck.data.DataStore = function() {
     // these two event handlers act on the IDBDatabase object, when the database is opened successfully, or not
     dbRequest.onerror = function(event) {
       console.log('error occurred...');
-      reject();
+      reject(event);
     };
 
     dbRequest.onsuccess = function(event) {
@@ -81,7 +82,7 @@ pifuxelck.data.DataStore.prototype.getDbName_ = function() {
 
 /**
  * Obtain the object store that contains the user's history.
- * @param {function(!goog.Promise.<!goog.db.ObjectStore>)}
+ * @param {!function(!goog.Promise.<!goog.db.ObjectStore>)} f
  */
 pifuxelck.data.DataStore.prototype.withHistory = function(f) {
   return this.getObjectStore_(pifuxelck.data.DataStore.HISTORY_STORE_).then(f);
@@ -90,7 +91,7 @@ pifuxelck.data.DataStore.prototype.withHistory = function(f) {
 
 /**
  * Obtain the object store that contains the user's contacts list.
- * @param {function(!goog.Promise.<!goog.db.ObjectStore>)}
+ * @param {!function(!goog.Promise.<!goog.db.ObjectStore>)} f
  */
 pifuxelck.data.DataStore.prototype.withContacts = function(f) {
   return this.getObjectStore_(pifuxelck.data.DataStore.CONTACTS_STORE_).then(f);

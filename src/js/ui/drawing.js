@@ -21,17 +21,17 @@ ui.Drawing = function(container) {
   /** @private {!graphics.Canvas} */
   this.canvas_ = new graphics.Canvas(container);
 
-  /** @private {data.Game} */
-  this.drawing_ = undefined;
+  /** @private {?data.Drawing} */
+  this.drawing_ = null;
 
-  /** @private {data.Line} */
-  this.line_ = undefined;
+  /** @private {?data.Line} */
+  this.line_ = null;
 };
 
 
 /**
  * Set the drawing
- * @param {data.Drawing} drawing
+ * @param {?data.Drawing} drawing
  */
 ui.Drawing.prototype.setDrawing = function(drawing) {
   this.drawing_ = drawing;
@@ -40,7 +40,7 @@ ui.Drawing.prototype.setDrawing = function(drawing) {
 
 /**
  * Set the in progress line.
- * @param {data.Line} line
+ * @param {?data.Line} line
  */
 ui.Drawing.prototype.setLine = function(line) {
   this.line_ = line;

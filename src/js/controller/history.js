@@ -1,7 +1,6 @@
 goog.provide('pifuxelck.controller.HistoryController');
 
 goog.require('pifuxelck.controller.BaseController');
-goog.require('pifuxelck.data.DataStore');
 goog.require('pifuxelck.ui.Drawing');
 goog.require('pifuxelck.ui.soy.history');
 goog.require('soy');
@@ -18,10 +17,7 @@ pifuxelck.controller.HistoryController = function() {
   /** @private {Element} */
   this.grid_ = document.getElementById('grid');
 
-  /** @private {pifuxelck.data.DataStore} */
-  this.dataStore_ = new pifuxelck.data.DataStore();
-
-  this.dataStore_.withHistory(goog.bind(this.loadHistory_, this));
+  this.getDataStore().withHistory(goog.bind(this.loadHistory_, this));
 };
 goog.inherits(
     pifuxelck.controller.HistoryController,
@@ -36,7 +32,8 @@ pifuxelck.controller.HistoryController.prototype.loadHistory_ = function(db) {
   var historyPromise = db.getAll();
   historyPromise.then(goog.bind(function(history) {
     history.sort(function(a, b) {
-      return parseInt(a['completed_at_id']) - parseInt(b['completed_at_id']);
+      return parseInt(a['completed_at_id'], 10) -
+             parseInt(b['completed_at_id'], 10);
     });
 
     // The current greatest completed_at_id.
@@ -47,7 +44,8 @@ pifuxelck.controller.HistoryController.prototype.loadHistory_ = function(db) {
     var finish = goog.bind(function() {
       console.log('history size: ' + JSON.stringify(history).length);
       history.sort(function(a, b) {
-        return parseInt(a['completed_at_id']) - parseInt(b['completed_at_id']);
+        return parseInt(a['completed_at_id'], 10) -
+               parseInt(b['completed_at_id'], 10);
       });
       for (var i = history.length - 1; i >= 0; --i) {
         var entry = history[i];
@@ -73,7 +71,7 @@ pifuxelck.controller.HistoryController.prototype.loadHistory_ = function(db) {
       for (var i = 0; i < games.length; ++i) {
         history.push(games[i]);
         goog.bind(function(game) {
-          this.dataStore_.withHistory(function(db) {
+          this.getDataStore().withHistory(function(db) {
             db.put(game).then(function() {
                   console.log('saved ' + game['id']);
                 }, function() {
@@ -82,7 +80,7 @@ pifuxelck.controller.HistoryController.prototype.loadHistory_ = function(db) {
           });
         }, this)(games[i]);
 
-        var completedAtId = parseInt(games[i]['completed_at_id']);
+        var completedAtId = parseInt(games[i]['completed_at_id'], 10);
         console.log('completed at id: ' + completedAtId);
         console.log('since id: ' + sinceId);
         if (sinceId <= completedAtId) {
@@ -118,8 +116,8 @@ pifuxelck.controller.HistoryController.prototype.renderDrawing_ = function(
     fragment,
     game) {
   var turns = game['turns'];
-  var drawing = new pifuxelck.ui.Drawing(fragment.children[0]);
-  if (turns.length > 1) {
+  var drawing = new pifuxelck.ui.Drawing(fragment.children[0].children[0]);
+  if (turns.length > 2) {
     drawing.setDrawing(turns[1]['drawing']);
   }
   drawing.updateCanvas();

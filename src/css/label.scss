@@ -1,0 +1,31 @@
+@import "common.scss";
+
+$spacing: 25px;
+$drawing-size: 500px;
+$label-height: 50px;
+
+.label-header {
+  position: absolute;
+  top: $navbar-height + $spacing;
+  left: 50%;
+  margin-left: 0 - ($drawing-size / 2);
+  width: $drawing-size;
+  height: $label-height;
+}
+
+.label-drawing {
+  position: absolute;
+  top: $navbar-height + $label-height + (2 * $spacing);
+  left: 50%;
+  margin-left: 0 - ($drawing-size / 2);
+  width: $drawing-size;
+  height: $drawing-size;
+  position: absolute;
+}
+
+.label-drawing > canvas.first {
+}
+
+.label-drawing > canvas.second {
+  margin-top: -100%;
+}

@@ -1,7 +1,7 @@
 goog.provide('pifuxelck.controller.DrawController');
 
 goog.require('goog.dom');
-goog.require('goog.dom.classes');
+goog.require('goog.dom.classlist');
 goog.require('goog.string');
 goog.require('pifuxelck.controller.BaseController');
 goog.require('pifuxelck.data.DataStore');
@@ -30,14 +30,17 @@ var newColor = function(r, g, b) {
 controller.DrawController = function() {
   controller.BaseController.call(this);
 
-  /** @private {!Element} */
-  this.drawingDiv_ = document.getElementById('drawing');
+  /** @private {!HTMLElement} */
+  this.drawingDiv_ = /** @type {!HTMLElement} */
+      (document.getElementById('drawing'));
 
-  /** @private {!Element} */
-  this.labelDiv_ = document.getElementById('drawing-label');
+  /** @private {!HTMLElement} */
+  this.labelDiv_ = /** @type {!HTMLElement} */
+      (document.getElementById('drawing-label'));
 
-  /** @private {!Element} */
-  this.overlayDiv_ = document.getElementById('overlay');
+  /** @private {!HTMLElement} */
+  this.overlayDiv_ = /** @type {!HTMLElement} */
+      (document.getElementById('overlay'));
 
   /** @private {!data.Drawing} */
   this.drawing_ = data.newEmptyDrawing();
@@ -46,21 +49,21 @@ controller.DrawController = function() {
   this.drawingUi_ = new ui.Drawing(this.drawingDiv_);
   this.drawingUi_.setDrawing(this.drawing_);
 
-  /** @private {!data.Color} */
+  /** @private {!ui.graphics.Color} */
   this.strokeColor_ = ui.graphics.newColor(0, 0, 0, 1);
 
-  /** @private {!data.Color} */
+  /** @private {number} */
   this.strokeSize_ = 0.0125;
 
-  /** @private {data.Line} */
-  this.inProgressLine_ = undefined;
+  /** @private {?data.Line} */
+  this.inProgressLine_ = null;
 
   var uri = new goog.Uri(window.location.href);
   /** @private {number} */
-  this.gameId_ = parseInt(uri.getQueryData().get('game'));
+  this.gameId_ = parseInt(uri.getQueryData().get('game'), 10);
 
-  /** @private {number} */
-  this.label_ = uri.getQueryData().get('label');
+  /** @private {string} */
+  this.label_ = /** @type {string} */ (uri.getQueryData().get('label'));
 
   this.labelDiv_.appendChild(document.createTextNode(this.label_));
 
@@ -143,13 +146,13 @@ controller.DrawController.prototype.onFabClick_ = function() {
 
 controller.DrawController.prototype.showOverlay_ = function() {
   goog.dom.removeChildren(this.overlayDiv_);
-  goog.dom.classes.remove(this.overlayDiv_, 'drawing-overlay-hidden');
+  goog.dom.classlist.remove(this.overlayDiv_, 'drawing-overlay-hidden');
 };
 
 
 controller.DrawController.prototype.hideOverlay_ = function() {
   goog.dom.removeChildren(this.overlayDiv_);
-  goog.dom.classes.add(this.overlayDiv_, 'drawing-overlay-hidden');
+  goog.dom.classlist.add(this.overlayDiv_, 'drawing-overlay-hidden');
 };
 
 
@@ -233,9 +236,9 @@ controller.DrawController.prototype.onMouseUp_ = function(e) {
   }
 
   this.drawing_['lines'].push(this.inProgressLine_);
-  this.inProgressLine_ = undefined;
+  this.inProgressLine_ = null;
 
-  this.drawingUi_.setLine(undefined);
+  this.drawingUi_.setLine(null);
   this.drawingUi_.updateCanvas();
 };
 
@@ -251,6 +254,20 @@ controller.DrawController.prototype.onMouseMove_ = function(e) {
   var size = boundingBox.width;
   var x = (e.x - boundingBox.left) / size;
   var y = (e.y - boundingBox.top) / size;
+
+  var numPoints = this.inProgressLine_['points'].length;
+  if (numPoints != 0) {
+    var lastPoint = this.inProgressLine_['points'][numPoints - 1];
+    var dX = lastPoint['x'] - x;
+    var dY = lastPoint['y'] - y;
+    var sqrDiff = dX * dX + dY * dY;
+
+    var minDiff = 0.01;
+    if (sqrDiff < minDiff * minDiff) {
+      return;
+    }
+  }
+
   this.inProgressLine_['points'].push(data.newPoint(x, y));
   this.drawingUi_.updateCanvas();
 };

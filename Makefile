@@ -60,10 +60,10 @@ ${DEPLOY_JS} : ${SRCS_JS} ${GEN_TEMPLATES}
 					--namespace=${NAMESPACE} \
 					--output_mode=${COMPILE_MODE} \
 					--compiler_flags=--warning_level=VERBOSE \
-					--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS \
 					--compiler_flags=--closure_entry_point=${NAMESPACE} \
 					--compiler_jar=${CLOSURE_COMPILER} > ${DEPLOY_JS}
 # Add the following to the above flags if/when we have externs...
+#					--compiler_flags=--compilation_level=ADVANCED_OPTIMIZATIONS \
 #					${EXTERNS_FLAGS} \
 
 ${GEN_TEMPLATES} : ${SRCS_TEMPLATES}

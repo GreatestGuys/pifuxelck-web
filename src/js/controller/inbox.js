@@ -12,6 +12,7 @@ goog.require('pifuxelck.ui.soy.inbox');
 
 /**
  * @constructor
+ * @extends {pifuxelck.controller.BaseController}
  */
 pifuxelck.controller.InboxController = function() {
   pifuxelck.controller.BaseController.call(this);
