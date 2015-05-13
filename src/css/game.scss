@@ -1,0 +1,70 @@
+@import "common.scss";
+
+$game-list-width: 800px;
+$turn-card-min-height: 50px;
+$spacing: 25px;
+$player-min-height: 25px;
+
+.game-list {
+  position: absolute;
+  width: $game-list-width;
+  top: $navbar-height + $spacing;
+  margin-left: 0 - ($game-list-width / 2);
+  left: 50%;
+}
+
+.turn-card {
+  width: $game-list-width;
+  min-height: $turn-card-min-height;
+  background: white;
+  margin-top: $spacing;
+  margin-bottom: $spacing;
+
+  @include drop-shadow;
+}
+
+.turn-card-player {
+  position: relative;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  min-height: $player-min-height;
+
+  font-size: large;
+  color: $secondaryText;
+  text-align: right;
+}
+
+.turn-card-label {
+  position: relative;
+  left: 0px;
+  width: 100%;
+  min-height: $player-min-height;
+
+  font-size: xx-large;
+  color: $primaryText;
+  text-align: center;
+}
+
+.turn-card-drawing {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  width: $game-list-width;
+  height: $game-list-width;
+}
+
+.turn-card-drawing > canvas {
+  position: relative;
+  width: $game-list-width;
+  height: $game-list-width;
+  left: 0px;
+  top: 0px;
+}
+
+.turn-card-drawing > canvas.first {
+}
+
+.turn-card-drawing > canvas.second {
+  margin-top: 0 - $game-list-width;
+}

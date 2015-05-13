@@ -48,26 +48,26 @@ controller.GameController.prototype.loadGame_ = function(db) {
     var turns = game['turns'];
     for (var i = 0; i < turns.length; ++i) {
       if (turns[i]['is_drawing']) {
-        this.renderDrawing_(turns[i]['drawing']);
+        this.renderDrawing_(turns[i]);
       } else {
-        this.renderLabel_(turns[i]['label']);
+        this.renderLabel_(turns[i]);
       }
     }
   }, this));
 };
 
 
-controller.GameController.prototype.renderDrawing_ = function(drawing) {
-  var fragment = soy.renderAsFragment(ui.soy.game.drawingTurn);
+controller.GameController.prototype.renderDrawing_ = function(turn) {
+  var fragment = soy.renderAsFragment(ui.soy.game.drawingTurn, turn);
   var uiDrawing = new pifuxelck.ui.Drawing(fragment.children[0]);
   this.grid_.appendChild(fragment);
-  uiDrawing.setDrawing(drawing);
+  uiDrawing.setDrawing(turn['drawing']);
   uiDrawing.updateCanvas();
 };
 
 
-controller.GameController.prototype.renderLabel_ = function(label) {
-  var fragment = soy.renderAsFragment(ui.soy.game.labelTurn, {'label': label});
+controller.GameController.prototype.renderLabel_ = function(turn) {
+  var fragment = soy.renderAsFragment(ui.soy.game.labelTurn, turn);
   this.grid_.appendChild(fragment);
 };
 

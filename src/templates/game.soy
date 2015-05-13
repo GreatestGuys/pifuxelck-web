@@ -3,22 +3,22 @@
 
 /**
  * @param label The label of this particular history entry.
+ * @param player The display name of the player who performed this turn.
  */
 {template .labelTurn}
-<div class="grid-element">
-  <div class="grid-element-drawing"></div>
-  <div class="grid-element-label">
-    {$label}
-  </div>
+<div class="turn-card">
+  <div class="turn-card-label">{$label}</div>
+  <div class="turn-card-player">{$player}</div>
 </div>
 {/template}
 
 
 /**
+ * @param player The display name of the player who performed this turn.
  */
 {template .drawingTurn}
-<div class="grid-element">
-  <div class="grid-element-drawing"></div>
-  <div class="grid-element-label"></div>
+<div class="turn-card">
+  <div class="turn-card-drawing"></div>
+  <div class="turn-card-player">{$player}</div>
 </div>
 {/template}
