@@ -128,13 +128,7 @@ pifuxelck.api.ApiImpl.prototype.lookupUserId = function(displayName) {
 };
 
 
-/**
- * Creates a new game.
- * @param {string} label the initial label
- * @param {!Array<number>} players a list IDs of players that are to be included
- *                                 in the game
- * @return {goog.Promise} a future that resolves if the game was created
- */
+/** @inheritDoc */
 pifuxelck.api.ApiImpl.prototype.newGame = function(label, players) {
   var body = {'new_game': {'label': label, 'players': players}};
   return this.makeApiCall_(
@@ -145,29 +139,25 @@ pifuxelck.api.ApiImpl.prototype.newGame = function(label, players) {
 };
 
 
-/**
- * Queries the current logged in user's inbox.
- * @return {goog.Promise.<Array.<pifuxelck.data.InboxEntry>>} the list of all
- *     current entries in a user's inbox
- */
-pifuxelck.api.ApiImpl.prototype.inbox = function() {
-  return this.makeApiCall_(
-      '/api/2/games/inbox',
-      function(response, resolve, reject) {
-        resolve(response['inbox_entries'] || []);
-      });
+/** @inheritDoc */
+pifuxelck.api.ApiImpl.prototype.inbox = function(opt_gameId) {
+  if (opt_gameId) {
+    return this.makeApiCall_(
+        '/api/2/games/inbox/' + opt_gameId,
+        function(response, resolve, reject) {
+          resolve([response['inbox_entry']] || []);
+        });
+  } else {
+    return this.makeApiCall_(
+        '/api/2/games/inbox',
+        function(response, resolve, reject) {
+          resolve(response['inbox_entries'] || []);
+        });
+  }
 };
 
 
-/**
- * Submit a turn for an active game.
- * @param {number} gameId the ID of the game
- * @param {!pifuxelck.data.Turn} turn the turn that is to be submitted. It is
- *     not necessary for the player ID of the turn to be filled in as it will be
- *     inferred by the logged in state of the user.
- * @return {!goog.Promise} a future that resolves if submitting the move
- *     succeeded
- */
+/** @inheritDoc */
 pifuxelck.api.ApiImpl.prototype.move = function(gameId, turn) {
   var body = {'turn': turn};
   return this.makeApiCall_(
@@ -178,12 +168,7 @@ pifuxelck.api.ApiImpl.prototype.move = function(gameId, turn) {
 }
 
 
-/**
- * Retrieve a list of games that occurred after the given timestamp.
- * @param startTimeId The completed_at_id of the last game.
- * @return {!goog.Promise.<Array.<pifuxelck.data.Game>>} the list of completed
- *     games
- */
+/** @inheritDoc */
 pifuxelck.api.ApiImpl.prototype.history = function(startTimeId) {
   return this.makeApiCall_(
       '/api/2/games?since=' + startTimeId,

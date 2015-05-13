@@ -56,15 +56,20 @@ pifuxelck.controller.InboxController.prototype.renderEntry_ = function(entry) {
 pifuxelck.controller.InboxController.prototype.renderDrawing_ = function(
     gameId,
     drawingTurn) {
+  console.log('rendering drawing...');
   var fragment = soy.renderAsFragment(
       pifuxelck.ui.soy.inbox.drawing,
       {'gameId': gameId});
   this.inboxList_.appendChild(fragment);
 
-  var drawingDiv = goog.dom.getElementByClass(fragment, 'grid-element-drawing');
+  console.log('added fragment');
+
+  var drawingDiv = fragment.getElementsByTagName('div')[0];
   var drawing = new pifuxelck.ui.Drawing(drawingDiv);
   drawing.setDrawing(drawingTurn['drawing']);
   drawing.updateCanvas();
+
+  console.log('updated canvas...');
 };
 
 

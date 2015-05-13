@@ -66,7 +66,9 @@ pifuxelck.api.Api.prototype.newGame = goog.abstractMethod;
 
 
 /**
- * Queries the current logged in user's inbox.
+ * Queries the current logged in user's inbox. If a game ID is gen then just the
+ * requested entry will be returned.
+ * @param {string=} opt_gameId the gameId label
  * @return {goog.Promise.<Array.<pifuxelck.data.InboxEntry>>} the list of all
  *     current entries in a user's inbox
  */
