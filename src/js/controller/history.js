@@ -117,7 +117,7 @@ pifuxelck.controller.HistoryController.prototype.renderDrawing_ = function(
     game) {
   var turns = game['turns'];
   var drawing = new pifuxelck.ui.Drawing(fragment.children[0].children[0]);
-  if (turns.length > 2) {
+  if (turns.length > 1) {
     drawing.setDrawing(turns[1]['drawing']);
   }
   drawing.updateCanvas();
